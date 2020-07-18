@@ -1,0 +1,116 @@
+.App {
+  text-align: center;
+}
+
+
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Clock {
+  /*background-color: red;*/
+}
+
+.Date {
+  top: 100%;
+  text-align: left;
+  /*background-color: blue;*/
+}
+
+.Weather {
+  text-align: right;
+  /*background-color:yellow;*/
+}
+
+.tempDegree {
+  /*background-color: green;*/
+  font-size: 2em;
+}
+
+.seconds {
+  /*background-color: red;*/
+  font-size: 40% ;
+  vertical-align: top;
+  position: absolute;
+  margin-top: -5px;
+  color: #5e5e5e!important;
+}
+
+.periods {
+  margin-left: 15px;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.top-buffer {
+  /*margin-top: 5rem;*/
+}
+.top-buffer-bottom{
+  margin-top: 8rem;
+}
+ i {
+   margin-right: 5px;
+   margin-top: 0px;
+ }
+
+.right {
+   position: absolute;
+   bottom: 0;
+}
+.spotify {
+  /*background-color: green;*/
+  font-size: 16px;
+}
+
+.songInfo {
+  margin-bottom: 0px;
+  line-height: 1;
+}
+
+.below-album-img {
+  margin-top: 20px;
+}
+
+.left {
+  margin-left: 5rem;
+}
+
+.no-padding {
+  padding-left: 0!important;
+  padding-right: 0!important;
+}
+
+.row3-height {
+  height: 4rem;
+}
+
+.move-up {
+  position: absolute;
+  width: 100%;
+  margin-top: -150px;
+}
+
+.second-bottom {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  margin-bottom: 400px;
+}
+
+.message-size {
+  font-size: 50px;
+  line-height: 1;
+}
+

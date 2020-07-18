@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="spotify">
+        hello
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io()
+
+        socket.on("getPlayBackState", data => {
+            const spotify = document.querySelector('.spotify')
+
+            if (data.noSong) {
+                const html = `
+    <img class="spotify__image" src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="not playing">
+    <div class="spotify__song">
+      <span class="spotify__track">${'no song'}</span>
+    </div>`
+
+                while (spotify.firstChild) spotify.removeChild(spotify.firstChild)
+                spotify.insertAdjacentHTML('afterbegin', html)
+
+            }
+            else {
+                const html = `
+    <img class="spotify__image" src="${data.imgURL}" alt="${data.songTitle}">
+    <div class="spotify__song">
+      <span class="spotify__track">${data.songTitle}</span>
+      <span class="spotify__artist">${data.artist}</span>
+      <span class="spotify__artist">${data.album}</span>
+    </div>`
+
+                while (spotify.firstChild) spotify.removeChild(spotify.firstChild)
+                spotify.insertAdjacentHTML('afterbegin', html)
+            }
+        })
+    </script>
+</body>
+
+</html>
