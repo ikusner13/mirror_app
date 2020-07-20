@@ -19,11 +19,11 @@ const Clock = () => {
     }, [])
 
     return (
-        <div>
+        <div className="display-3 clock-size">
             <span className="">{hour}</span>:
             <span className="">{minute}</span>
             <span className="seconds ">{second}</span>
-            <span className="periods">{periods}</span>
+            <span className="periods ">{periods}</span>
         </div>
     )
 }
