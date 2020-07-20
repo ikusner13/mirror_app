@@ -4,6 +4,7 @@ const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const cors = require('cors')
+const { PORT } = require('../config')
 
 const { spotify } = require('../config')
 
@@ -11,6 +12,7 @@ const { spotify } = require('../config')
 var client_id = spotify.client_id // Your client id
 var client_secret = spotify.client_secret; // Your secret
 var redirect_uri = spotify.redirect_uri;
+
 const spotifyApi = new SpotifyWebApi({
     clientId: client_id,
     clientSecret: client_secret,
@@ -26,7 +28,7 @@ spotifyApi.setAccessToken(access_token)
 spotifyApi.setRefreshToken(refresh_token)
 
 //app.use(cors())
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
     const origin = req.get('origin');
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', true);
@@ -37,10 +39,10 @@ app.use(function (req, res, next) {
     if (req.method === 'OPTIONS') {
         res.sendStatus(204);
     } else {
-        console.log(origin);
+        console.log('origin', origin);
         next();
     }
-})
+})*/
 
 app.use(express.static(__dirname + '/index.html'))
 
@@ -52,7 +54,6 @@ const config = {
     CURRENT_PULL: 3000,
     MIN_PULL: 3000
 }
-
 
 
 //SOCKET SETUP
@@ -133,8 +134,8 @@ const refresh = async () => {
 }
 
 
-http.listen(5000, () => {
-    console.log('listening on port 5000')
+http.listen(PORT, () => {
+    console.log(`listening on port ${PORT}`)
 })
 
 //module.exports = app
