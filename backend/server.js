@@ -5,6 +5,7 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const cors = require('cors')
 const { PORT } = require('../config')
+const path = require('path')
 
 const { spotify } = require('../config')
 
@@ -12,6 +13,8 @@ const { spotify } = require('../config')
 var client_id = spotify.client_id // Your client id
 var client_secret = spotify.client_secret; // Your secret
 var redirect_uri = spotify.redirect_uri;
+const access_token = spotify.access_token
+const refresh_token = spotify.refresh_token
 
 const spotifyApi = new SpotifyWebApi({
     clientId: client_id,
@@ -19,9 +22,6 @@ const spotifyApi = new SpotifyWebApi({
     redirectUri: redirect_uri
 })
 
-
-const access_token = spotify.access_token
-const refresh_token = spotify.refresh_token
 let tokenExpirationEpoch = new Date().getTime() / 1000 + 3600
 
 spotifyApi.setAccessToken(access_token)
@@ -44,11 +44,7 @@ spotifyApi.setRefreshToken(refresh_token)
     }
 })*/
 
-app.use(express.static(__dirname + '/index.html'))
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
+app.use(express.static(path.join(__dirname, 'public')))
 
 const config = {
     CURRENT_PULL: 3000,
