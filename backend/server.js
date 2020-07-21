@@ -46,6 +46,11 @@ spotifyApi.setRefreshToken(refresh_token)
 
 app.use(express.static('build'))
 
+/*app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/build/index.html')
+})*/
+
+
 const config = {
     CURRENT_PULL: 3000,
     MIN_PULL: 3000

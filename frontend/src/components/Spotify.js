@@ -4,7 +4,7 @@ import SpotifyPlaying from './Spotify-playing'
 
 const SERVER = 'http://localhost:5000/'
 
-const socket = io()
+const socket = io(SERVER)
 
 const Spotify = () => {
     const [songInfo, setSongInfo] = useState({ noSong: true })
