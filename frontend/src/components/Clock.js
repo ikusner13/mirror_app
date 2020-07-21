@@ -7,14 +7,14 @@ const Clock = () => {
     const [hour, setHour] = useState('')
     const [periods, setPeriods] = useState('')
 
-    const time = () => {
-        setHour(moment().format('hh'))
-        setMinute(moment().format('mm'))
-        setSecond(moment().format('ss'))
-        setPeriods(moment().format('a'))
-        setTimeout(time, 1000)
-    }
     useEffect(() => {
+        const time = () => {
+            setHour(moment().format('hh'))
+            setMinute(moment().format('mm'))
+            setSecond(moment().format('ss'))
+            setPeriods(moment().format('a'))
+            setTimeout(time, 1000)
+        }
         time()
     }, [])
 

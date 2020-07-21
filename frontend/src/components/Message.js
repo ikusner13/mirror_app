@@ -43,23 +43,22 @@ const getRandomMessage = (messages) => {
 const Message = () => {
     const [currentMessage, setCurrentMessage] = useState("Hello Paige")
 
-    const changeMessage = () => {
-        if (getHoliday() !== null) {
-            setCurrentMessage(getHoliday())
-        }
-        else {
-            const set = currentSet()
-            setCurrentMessage(getRandomMessage(set))
-        }
-
-        let time = helper.closestRefresh(defaults.morningStart
-            , defaults.morningEnd
-            , defaults.nightStart
-        )
-        setTimeout(changeMessage, time)
-    }
-
     useEffect(() => {
+        const changeMessage = () => {
+            if (getHoliday() !== null) {
+                setCurrentMessage(getHoliday())
+            }
+            else {
+                const set = currentSet()
+                setCurrentMessage(getRandomMessage(set))
+            }
+
+            let time = helper.closestRefresh(defaults.morningStart
+                , defaults.morningEnd
+                , defaults.nightStart
+            )
+            setTimeout(changeMessage, time)
+        }
         setTimeout(() => {
             changeMessage()
         }, 5000);

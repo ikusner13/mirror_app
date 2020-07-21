@@ -37,28 +37,21 @@ const CurrentWeather = () => {
         }
     }
 
-    const getSunSet = (timestamp) => {
-        return moment.unix(timestamp).format('hh:mm')
-
-    }
-
-    const fetchData = async () => {
-        const fetch_res = await fetch(api_uri)
-        const json = await fetch_res.json()
-        console.log(json)
-
-        setTemp(json.main.temp)
-
-        setCondition(json.weather[0].description)
-
-        setIcon((json.weather[0].id).toString())
-        setHighLow({ high: json.main.temp_max, low: json.main.temp_min })
-        setSunSet(json.sys.sunset)
-        getDayorNightIcons()
-        setTimeout(fetchData, updateTime)
-    }
-
     useEffect(() => {
+        const fetchData = async () => {
+            const fetch_res = await fetch(api_uri)
+            const json = await fetch_res.json()
+
+            setTemp(json.main.temp)
+
+            setCondition(json.weather[0].description)
+
+            setIcon((json.weather[0].id).toString())
+            setHighLow({ high: json.main.temp_max, low: json.main.temp_min })
+            setSunSet(json.sys.sunset)
+            getDayorNightIcons()
+            setTimeout(fetchData, updateTime)
+        }
         fetchData()
     }, [])
     return (

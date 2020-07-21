@@ -2,8 +2,6 @@
   text-align: center;
 }
 
-
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -32,13 +30,10 @@
 }
 
 .seconds {
-  /*background-color: red;*/
   font-size: 40% ;
-  /*vertical-align: top;*/
   position: relative;
   top: -30px;
   margin-left: -1px;
-  /*margin-top: -5px;*/
   color: #5e5e5e!important;
 }
 
@@ -48,9 +43,6 @@
   width: 100%;
 }
 
-.top-buffer {
-  /*margin-top: 5rem;*/
-}
 .top-buffer-bottom{
   margin-top: 8rem;
 }

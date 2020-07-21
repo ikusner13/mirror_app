@@ -7,7 +7,6 @@ const CurrentDate = () => {
 
     const date = () => {
         setCurrentDate(moment().format('dddd, MMMM Do YYYY'))
-        console.log('New Date')
         let timeToTwelve = helper.calculateTimeTil(0)
         setTimeout(date, timeToTwelve)
     }

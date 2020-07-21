@@ -1,6 +1,6 @@
 const Messages = {
     anyTime: [
-        /*"I love you",
+        "I love you",
         "Hey there sexy",
         "Hello Paige",
         "You look beautiful",
@@ -19,8 +19,7 @@ const Messages = {
         "Is it hot in here? Or is it just you",
         "Did you have lucky charms for breakfast? Because you look magically delicious",
         "Nice legs",
-        "Hey there beautiful",*/
-        "Hello"
+        "Hey there beautiful",
     ],
     morning: [
         "Good morning",
