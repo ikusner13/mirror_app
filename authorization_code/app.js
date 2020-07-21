@@ -18,8 +18,6 @@ var client_id = spotify.client_id; // Your client id
 var client_secret = spotify.client_secret; // Your secret
 var redirect_uri = spotify.redirect_uri; // Your redirect uri
 
-//var accessToken = 'BQBvZJ2OXgrvDLY4idfp01vP8SMFif1eo32HPtqtwiVJyt5sqDfSPgXmmTbzo6jVSTywH4QKJP0jZ4wMdtfUsSpbytA74RatNNPiT1JtgP1PB9gROI03vcHEjoNciW8dPt6g5nWAnwXBh4XDL_qr9VSiEbL-_NPj7aU'
-
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
