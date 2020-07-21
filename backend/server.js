@@ -67,7 +67,7 @@ io.on('connect', socket => {
 const setNowPlaying = async () => {
 
     spotifyApi.getMyCurrentPlaybackState({}).then(result => {
-
+        config.CURRENT_PULL = config.MIN_PULL
         //if body return something (is playing)
         if (Object.keys(result.body).length > 0) {
             config.SOCKET.emit("getPlayBackState", sendablePayload(result.body))
@@ -83,6 +83,9 @@ const setNowPlaying = async () => {
         console.error(error)
         if (error.message === 'Unauthorized') {
             refresh()
+        }
+        else {
+            config.CURRENT_PULL = (config.CURRENT_PULL < 5000) ? config.CURRENT_PULL + 1000 : 5000
         }
     })
 
@@ -118,11 +121,11 @@ const refresh = async () => {
         spotifyApi.setAccessToken(newToken.body['access_token'])
         tokenExpirationEpoch =
             new Date().getTime() / 1000 + newToken.body['expires_in'];
-        console.log(
+        /*console.log(
             'Refreshed token. It now expires in ' +
             Math.floor(tokenExpirationEpoch - new Date().getTime() / 1000) +
             ' seconds!'
-        );
+        );*/
     } catch (err) {
         console.log(err.message)
     }
