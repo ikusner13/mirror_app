@@ -32,7 +32,7 @@
 .seconds {
   font-size: 40% ;
   position: relative;
-  top: -30px;
+  top: -24px;
   margin-left: -1px;
   color: #5e5e5e!important;
 }
@@ -97,7 +97,7 @@
 }
 
 .weather-text {
-  font-size: 50%;
+  font-size: 60%;
 }
 
 .message-size {
@@ -110,8 +110,8 @@
 }
 
 .high-low {
-  font-size: 30%;
-  margin-bottom: -5px;
+  font-size: 70%;
+  margin-bottom: -3px;
   margin-top: -2px;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .sunset {
-  font-size: 20%;
+  font-size: 70%;
   
 }
 

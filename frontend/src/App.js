@@ -15,11 +15,11 @@ function App() {
       <Container fluid={true}>
 
         <Row className="" >
-          <Col md={5} className="" >
+          <Col md={6} className="" >
             <Date className="Date" />
             <Clock className="Clock" />
           </Col>
-          <Col md={{ span: 4, offset: 3 }} className="Weather">
+          <Col md={{ span: 4, offset: 2 }} className="Weather">
             <CurrentWeather />
           </Col>
         </Row>
