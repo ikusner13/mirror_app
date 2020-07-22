@@ -8,7 +8,7 @@ const Messages = {
         "What a sweetheart",
         "Sweetheart",
         "You're a cutie",
-        "Are you from tennesse? Because you're the only 10 I see",
+        "Are you from Tennessee? Because you're the only 10 I see",
         "My princess",
         "I hope you're having a good day",
         "Hello",
