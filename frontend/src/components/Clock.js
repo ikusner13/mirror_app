@@ -7,23 +7,23 @@ const Clock = () => {
     const [hour, setHour] = useState('')
     const [periods, setPeriods] = useState('')
 
-    const time = () => {
-        setHour(moment().format('hh'))
-        setMinute(moment().format('mm'))
-        setSecond(moment().format('ss'))
-        setPeriods(moment().format('a'))
-        setTimeout(time, 1000)
-    }
     useEffect(() => {
+        const time = () => {
+            setHour(moment().format('hh'))
+            setMinute(moment().format('mm'))
+            setSecond(moment().format('ss'))
+            setPeriods(moment().format('A'))
+            setTimeout(time, 1000)
+        }
         time()
     }, [])
 
     return (
-        <div>
+        <div className="display-4 clock-size">
             <span className="">{hour}</span>:
             <span className="">{minute}</span>
             <span className="seconds ">{second}</span>
-            <span className="periods">{periods}</span>
+            <span className="periods ">{periods}</span>
         </div>
     )
 }

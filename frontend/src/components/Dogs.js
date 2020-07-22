@@ -1,23 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import helper from '../config'
 
 const dog_url = 'https://dog.ceo/api/breeds/image/random'
 
-const calculateTime = (hour) => {
-    let now = new Date()
-    let timeTil12 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, 0, 0, 0) - now;
-    if (timeTil12 < 0) {
-        timeTil12 += 86400000
-    }
-    //console.log(timeTil12)
-    return timeTil12
-}
-
-const closestRefresh = () => {
-    const morning = calculateTime(10)
-    const evening = calculateTime(22)
-
-    return (morning < evening) ? morning : evening
-}
 const Dog = () => {
 
     const [imgSource, setImgSource] = useState('')
@@ -27,11 +12,10 @@ const Dog = () => {
             const res = await fetch(dog_url)
             const json = await res.json()
             const img_uri = json.message
-            //console.log(json.message)
 
             setImgSource(img_uri)
 
-            const time = closestRefresh()
+            const time = helper.closestRefresh(10, 22)
             setTimeout(fetchData, time)
         }
         fetchData();

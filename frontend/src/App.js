@@ -15,22 +15,22 @@ function App() {
       <Container fluid={true}>
 
         <Row className="" >
-          <Col md={4} className="" >
+          <Col md={6} className="" >
             <Date className="Date" />
             <Clock className="Clock" />
           </Col>
-          <Col md={{ span: 4, offset: 4 }} className="Weather">
+          <Col md={{ span: 4, offset: 2 }} className="text-right">
             <CurrentWeather />
           </Col>
         </Row>
 
         <Row className="second-bottom message-size">
-          <Col md={{ span: 8, offset: 2 }} className="text-center">
+          <Col md={{ span: 11, offset: 0 }} className="text-center">
             <Message />
           </Col>
         </Row>
 
-        <Row className="bottom" >
+        <Row className="bottom " >
           <Col md={6} className="spotify mt-auto" >
             <Spotify />
           </Col>
@@ -42,5 +42,5 @@ function App() {
     </div >
   );
 }
-//hi
+
 export default App;
