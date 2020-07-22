@@ -4,7 +4,7 @@ import SpotifyPlaying from './Spotify-playing'
 
 const SERVER = 'http://localhost:5000/'
 
-const socket = io()
+const socket = io(SERVER)
 
 const Spotify = () => {
     const [songInfo, setSongInfo] = useState({ noSong: true })
@@ -12,9 +12,6 @@ const Spotify = () => {
     useEffect(() => {
         socket.on("getPlayBackState", (data) => {
             setSongInfo(data)
-        })
-        socket.on('connect_error', () => {
-            setSongInfo({ noSong: true })
         })
     }, [])
 

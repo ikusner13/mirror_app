@@ -19,6 +19,8 @@ const closestRefresh = (...times) => {
         return calculateTimeTil(hour)
     })
 
+    console.log(timesTil)
+
     return (Math.min(...timesTil))
 }
 

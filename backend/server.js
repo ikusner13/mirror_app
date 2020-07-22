@@ -44,7 +44,7 @@ spotifyApi.setRefreshToken(refresh_token)
     }
 })*/
 
-app.use(express.static('build'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 const config = {
     CURRENT_PULL: 3000,
