@@ -3,6 +3,7 @@ const server = require('./backend/server')
 const helper = require('./config')
 const path = require('path')
 const url = require('url')
+
 const createWindow = () => {
     let mainWindow = new BrowserWindow({
         width: 800,
