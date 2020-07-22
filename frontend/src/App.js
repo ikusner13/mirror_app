@@ -19,7 +19,7 @@ function App() {
             <Date className="Date" />
             <Clock className="Clock" />
           </Col>
-          <Col md={{ span: 4, offset: 2 }} className="Weather">
+          <Col md={{ span: 4, offset: 2 }} className="text-right">
             <CurrentWeather />
           </Col>
         </Row>

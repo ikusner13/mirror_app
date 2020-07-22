@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron')
 const server = require('./backend/server')
 const helper = require('./config')
+const path = require('path')
+const url = require('url')
 const createWindow = () => {
     let mainWindow = new BrowserWindow({
         width: 800,
@@ -21,8 +23,14 @@ const createWindow = () => {
         mainWindow = null;
     });
 
+    //mainWindow.webContents.openDevTools();
 
-    mainWindow.loadURL(`http://localhost:${helper.PORT}`)
+
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, './backend/build/index.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
 }
 
 app.whenReady().then(createWindow)

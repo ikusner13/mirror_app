@@ -6,7 +6,7 @@ const CurrentDate = () => {
     const [currentDate, setCurrentDate] = useState(moment().format('LL'))
 
     const date = () => {
-        setCurrentDate(moment().format('dddd, MMMM Do YYYY'))
+        setCurrentDate(moment().format('dddd, MMMM Do'))
         let timeToTwelve = helper.calculateTimeTil(0)
         setTimeout(date, timeToTwelve)
     }

@@ -58,19 +58,17 @@ const CurrentWeather = () => {
         <div className="">
             <Container fluid={true}>
                 <Row className="weather-text"  >
-                    <Col className="text-right">
-                        <div className="high-low h-25">
-                            <span>
-                                high {Math.round(highLow.high)}&deg; / low {Math.round(highLow.low)}&deg;
-                            </span>
-                            <span>
-                                <i className="wi wi-sunset" />
-                                {moment.unix(sunSet).format('hh:mm')}
-                            </span>
+                    <Col className="text-right weather-col">
+                        <div className="high-low">
+                            high {Math.round(highLow.high)}&deg; / low {Math.round(highLow.low)}&deg;
+                            <i className="wi wi-sunset" />
+                            {moment.unix(sunSet).format('hh:mm')}
                         </div>
-                        <i className={`wi ${iconType[icon]} tempDegree`} />
-                        <span className="text-right temp tempDegree">{Math.round(Number(temp))}&deg;</span>
-                        <div className="condition">{condition}</div>
+                        <div className="">
+                            <i className={`wi ${iconType[icon]} tempDegree`} />
+                            <span className="temp tempDegree">{Math.round(Number(temp))}&deg;</span>
+                            <div className="condition">{condition}</div>
+                        </div>
                     </Col>
                 </Row>
             </Container>
