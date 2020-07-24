@@ -48,9 +48,7 @@ const Message = () => {
         const changeMessage = () => {
             if (getHoliday() !== null) {
                 const holiday = getHoliday()
-                setCurrentMessage(holiday[0])
-                setEmoji(holiday[1])
-
+                setCurrentMessage(holiday)
             }
             else {
                 const set = currentSet()
@@ -70,10 +68,9 @@ const Message = () => {
 
     return (
         <div className="">
-            <span className="mr-3">
+            <span className="">
                 {currentMessage}
             </span>
-            <span className={emoji}></span>
         </div>
     )
 }
