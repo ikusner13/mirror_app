@@ -34,14 +34,14 @@ const Messages = {
         "Sweet dreams"
     ],
     holidays: {
-        "01-01": "Happy New Years 🎉🎉🎉",
-        "02-14": "Happy Valentines day ❤️❤️❤️ ",
-        "07-24": "Happy Aniversary 😘😘😘",
-        "07-29": "Happy Birthday 🎂🎂🎂",
-        "10-31": "Happy Halloween 🎃🎃🎃",
-        "11-24": "Merry Christmas Eve 🎄🎄🎄",
-        "11-25": "Merry Christmas 🎅🎅🎅",
-        "11-31": "Happy New Years Eve 🍾🍾🍾",
+        "01-01": ["Happy New Years", "ec ec-tada"],
+        "02-14": ["Happy Valentines day", "ec ec-gift-heart"],
+        "07-24": ["Happy Aniversary", "ec ec-kissing-heart"],
+        "07-29": ["Happy Birthday", "ec ec-birthday"],
+        "10-31": ["Happy Halloween", "ec ec-jack-o-lantern"],
+        "11-24": ["Merry Christmas Eve ", "ec ec-christmas-tree"],
+        "11-25": ["Merry Christmas", "ec ec-santa"],
+        "11-31": ["Happy New Years Eve", "ec ec-champagne"],
     }
 
 

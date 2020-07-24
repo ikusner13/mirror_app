@@ -42,11 +42,14 @@ const getRandomMessage = (messages) => {
 }
 const Message = () => {
     const [currentMessage, setCurrentMessage] = useState("Hello Paige")
+    const [currentEmoji, setCurrentEmoji] = useState("")
 
     useEffect(() => {
         const changeMessage = () => {
             if (getHoliday() !== null) {
-                setCurrentMessage(getHoliday())
+                const holiday = getHoliday()
+                setCurrentMessage(holiday[0])
+                setCurrentEmoji(holiday[1])
             }
             else {
                 const set = currentSet()
@@ -65,9 +68,12 @@ const Message = () => {
     }, [])
 
     return (
-        <div className="">
-            {currentMessage}
-        </div>
+        <p className="">
+            <span className="mr-3">
+                {currentMessage}
+            </span>
+            <span className={currentEmoji}></span>
+        </p>
     )
 }
 
