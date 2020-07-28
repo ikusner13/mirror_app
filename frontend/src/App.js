@@ -6,6 +6,7 @@ import Dog from './components/Dogs'
 import CurrentWeather from './components/CurrentWeather'
 import Spotify from './components/Spotify'
 import Message from './components/Message'
+import Calendar from './components/Calendar'
 
 import { Row, Col, Container } from "react-bootstrap"
 
@@ -21,6 +22,12 @@ function App() {
           </Col>
           <Col md={{ span: 4, offset: 2 }} className="text-right">
             <CurrentWeather />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <Calendar />
           </Col>
         </Row>
 

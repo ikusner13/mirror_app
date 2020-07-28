@@ -6,6 +6,10 @@ const io = require('socket.io')(http)
 const cors = require('cors')
 const { PORT } = require('../config')
 const path = require('path')
+const ical = require('ical')
+const request = require('request')
+const moment = require('moment')
+
 
 const { spotify } = require('../config')
 
@@ -28,7 +32,7 @@ spotifyApi.setAccessToken(access_token)
 spotifyApi.setRefreshToken(refresh_token)
 
 //app.use(cors())
-/*app.use(function (req, res, next) {
+app.use(function (req, res, next) {
     const origin = req.get('origin');
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', true);
@@ -42,25 +46,28 @@ spotifyApi.setRefreshToken(refresh_token)
         console.log('origin', origin);
         next();
     }
-})*/
+})
 
 //app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static('build'))
 
 const config = {
     CURRENT_PULL: 3000,
-    MIN_PULL: 3000
+    MIN_PULL: 3000,
+    CALENDAR_PULL: 500000///300000
 }
 
 
 //SOCKET SETUP
 let connections = 0
 io.on('connect', socket => {
+    //console.log(io.sockets.eventNames())
     connections++
     config.SOCKET = socket
     console.log('socket Connected')
     if (connections <= 1) { //stops multiple socket connections from calling fetch loop
         setNowPlaying()
+        getICS()
     }
 })
 
@@ -133,9 +140,71 @@ const refresh = async () => {
 
 }
 
+//calendar
+const ical_uri = 'https://calendar.google.com/calendar/ical/splgvglb55q2kpbnjbsrab75f4%40group.calendar.google.com/private-928abe1b658ce5021f7b473cef3a6faf/basic.ics'
+const getICS = async () => {
+    let events = []
+    request(ical_uri, (err, r, Rdata) => {
+        const data = ical.parseICS(Rdata)
+
+        const dataArr = Object.values(data)
+        //console.log(dataArr)
+
+        events = dataArr.reduce(getUpcoming, []).map(({ start, end, summary }) => {
+            const startLocal = start.toLocaleString().split(" ")
+            const endLocal = end.toLocaleString().split(" ")
+            return { startLocal, endLocal, summary }
+        })
+
+        //console.log('upcoming', events)
+        config.SOCKET.emit("getEvents", events)
+
+        setTimeout(getICS, config.CALENDAR_PULL)
+    })
+}
+
+const getUpcoming = (filter, obj) => {
+    if (obj.type === 'VEVENT') {
+        const newObj = { start: obj.start, end: obj.end, summary: obj.summary }
+        if (newObj.end - Date.now() > 0) {
+            filter.push(newObj)
+        }
+    }
+    return filter.sort((a, b) => {
+        return new Date(a.start) - new Date(b.start)
+    })
+}
+
+//getICS()
+
+
 
 http.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
 })
 
 //module.exports = app
+
+/*const events = dataArr.filter((a) => {
+            //console.log('a', a)
+            return a.type == 'VEVENT'
+        })
+
+        console.log(events)
+
+        events.sort((a, b) => {
+            return new Date(a.start) - new Date(b.start)
+        })
+
+        const result = events.map(({ start, end, summary }) => {
+            const startLocal = start.setHours(start.getHours() - 4)
+            const endLocal = end.setHours(end.getHours() - 4)
+            return { start, end, summary }
+        })
+
+        const upcoming = result.filter(({ start }) => {
+            const now = Date.now()
+            console.log(now)
+            console.log(start - now)
+            return (start - now > 0)
+        })*/

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client'
+//import io from 'socket.io-client'
 import SpotifyPlaying from './Spotify-playing'
-
-const SERVER = 'http://localhost:5000/'
-
-const socket = io(SERVER)
+import socket from '../socket'
 
 const Spotify = () => {
     const [songInfo, setSongInfo] = useState({ noSong: true })
