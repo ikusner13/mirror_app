@@ -20,6 +20,7 @@ const Messages = {
         "Did you have lucky charms for breakfast? Because you look magically delicious",
         "Nice legs",
         "Hey there beautiful",
+        "Hey girl, are you Himalayan cuz I wanna see your Nepals"
     ],
     morning: [
         "Good morning",

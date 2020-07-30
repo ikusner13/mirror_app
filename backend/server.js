@@ -12,6 +12,7 @@ const moment = require('moment')
 
 
 const { spotify } = require('../config')
+const { duration } = require('moment')
 
 //SPOTIFY SETUP
 var client_id = spotify.client_id // Your client id
@@ -54,7 +55,7 @@ app.use(express.static('build'))
 const config = {
     CURRENT_PULL: 3000,
     MIN_PULL: 3000,
-    CALENDAR_PULL: 500000///300000
+    CALENDAR_PULL: 100000000//300000
 }
 
 
@@ -66,7 +67,7 @@ io.on('connect', socket => {
     config.SOCKET = socket
     console.log('socket Connected')
     if (connections <= 1) { //stops multiple socket connections from calling fetch loop
-        setNowPlaying()
+        //setNowPlaying()
         getICS()
     }
 })
@@ -149,14 +150,18 @@ const getICS = async () => {
 
         const dataArr = Object.values(data)
         //console.log(dataArr)
-
         events = dataArr.reduce(getUpcoming, []).map(({ start, end, summary }) => {
-            const startLocal = start.toLocaleString().split(" ")
-            const endLocal = end.toLocaleString().split(" ")
+
+            let startLocal = start.toLocaleString().split(" ")
+            let endLocal = end.toLocaleString().split(" ")
+
+            startLocal[0] = startLocal[0].slice(0, -1)
+            endLocal[0] = endLocal[0].slice(0, -1)
+
             return { startLocal, endLocal, summary }
         })
 
-        //console.log('upcoming', events)
+        //console.log(events)
         config.SOCKET.emit("getEvents", events)
 
         setTimeout(getICS, config.CALENDAR_PULL)
@@ -164,15 +169,75 @@ const getICS = async () => {
 }
 
 const getUpcoming = (filter, obj) => {
+    let newObj = []
     if (obj.type === 'VEVENT') {
-        const newObj = { start: obj.start, end: obj.end, summary: obj.summary }
-        if (newObj.end - Date.now() > 0) {
-            filter.push(newObj)
+        if (obj.rrule) {
+            // console.log(obj)
+            const rule = obj.rrule
+            const past = moment().startOf('day').toDate()
+            const future = moment().add(14, 'd').toDate()
+            let dates = rule.between(past, future, true)
+
+            //console.log(dates)
+            newObj = dates.map((e) => {
+                let start = moment(e).local().format('HH:mm')
+                let end = moment(obj.end).local().format('HH:mm')
+
+                const diff = timeDiff(start, end)
+                //console.log(moment(e).local().format('HH:mm'))
+                let endDate =
+                    obj.start.dateOnly
+                        ? moment.utc(e).add(1, 'd').format('YYYY-MM-DD')
+                        : moment.utc(e)
+                            .add(diff[0], 'hour')
+                            .add(diff[1], 'minute')
+                            .add(diff[2], 'second')
+                            .format('YYYY-MM-DD')
+                console.log(endDate)
+                const endTime = moment.utc(obj.end).format('HH:mm:ss')
+                const UTCstring = `${endDate}T${endTime}.000Z`
+                let endDateUTC = new Date(UTCstring)
+                //console.log(e)
+                const newDates = {
+                    start: e,
+                    end: endDateUTC,
+                    summary: obj.summary,
+                }
+                //console.log(newDates)
+                return newDates
+            })
         }
+        else {
+            newObj.push({ start: obj.start, end: obj.end, summary: obj.summary })
+        }
+
+
+        newObj.forEach(element => {
+            //console.log(new Date(Date.parse(element.end)))
+            console.log(element)
+            const parsed = new Date(Date.parse(element.end))
+            if (parsed - Date.now() > 0) {
+                //console.log(element)
+                filter.push(element)
+            }
+        });
     }
     return filter.sort((a, b) => {
         return new Date(a.start) - new Date(b.start)
     })
+}
+
+const timeDiff = (start, end) => {
+    start = start.split(':')
+    end = end.split(':')
+    const hour = end[0] - start[0] < 0
+        ? (end[0] - start[0]) + 24
+        : end[0] - start[0]
+    const result = [
+        hour,
+        end[1] - start[1],
+    ]
+    return result
 }
 
 //getICS()

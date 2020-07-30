@@ -25,8 +25,6 @@ const createWindow = () => {
     });
 
     //mainWindow.webContents.openDevTools();
-
-
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, './backend/build/index.html'),
         protocol: 'file:',

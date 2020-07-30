@@ -42,7 +42,6 @@ const getRandomMessage = (messages) => {
 }
 const Message = () => {
     const [currentMessage, setCurrentMessage] = useState("Hello Paige")
-    const [emoji, setEmoji] = useState("")
 
     useEffect(() => {
         const changeMessage = () => {
