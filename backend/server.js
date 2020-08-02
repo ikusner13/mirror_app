@@ -12,7 +12,7 @@ const moment = require('moment')
 
 
 const { spotify } = require('../config')
-const { duration } = require('moment')
+const { duration, min } = require('moment')
 
 //SPOTIFY SETUP
 var client_id = spotify.client_id // Your client id
@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
     if (req.method === 'OPTIONS') {
         res.sendStatus(204);
     } else {
-        console.log('origin', origin);
+        //console.log('origin', origin);
         next();
     }
 })
@@ -148,9 +148,14 @@ const getICS = async () => {
     request(ical_uri, (err, r, Rdata) => {
         const data = ical.parseICS(Rdata)
 
+        //console.log(data)
+
         const dataArr = Object.values(data)
         //console.log(dataArr)
         events = dataArr.reduce(getUpcoming, []).map(({ start, end, summary }) => {
+            //console.log('start', start)
+            //console.log('local', start.toLocaleString())
+            //console.log(moment(start).local())
 
             let startLocal = start.toLocaleString().split(" ")
             let endLocal = end.toLocaleString().split(" ")
@@ -161,7 +166,7 @@ const getICS = async () => {
             return { startLocal, endLocal, summary }
         })
 
-        //console.log(events)
+        console.log('events', events)
         config.SOCKET.emit("getEvents", events)
 
         setTimeout(getICS, config.CALENDAR_PULL)
@@ -169,21 +174,32 @@ const getICS = async () => {
 }
 
 const getUpcoming = (filter, obj) => {
+    //console.log(obj)
     let newObj = []
     if (obj.type === 'VEVENT') {
         if (obj.rrule) {
-            // console.log(obj)
+            //console.log('object', obj)
             const rule = obj.rrule
             const past = moment().startOf('day').toDate()
             const future = moment().add(14, 'd').toDate()
+            //console.log('past', past)
+            //console.log('future', future)
+            rule.options.dtstart = past
             let dates = rule.between(past, future, true)
 
-            //console.log(dates)
+            if (typeof dates[0] !== 'undefined' &&
+                new Date(dates[0]).getUTCHours() < 4) {
+                dates.forEach((date) => {
+                    date = date.setUTCDate(date.getUTCDate() + 1)
+                })
+            }
+
             newObj = dates.map((e) => {
                 let start = moment(e).local().format('HH:mm')
                 let end = moment(obj.end).local().format('HH:mm')
 
                 const diff = timeDiff(start, end)
+                console.log(diff)
                 //console.log(moment(e).local().format('HH:mm'))
                 let endDate =
                     obj.start.dateOnly
@@ -193,28 +209,26 @@ const getUpcoming = (filter, obj) => {
                             .add(diff[1], 'minute')
                             .add(diff[2], 'second')
                             .format('YYYY-MM-DD')
-                console.log(endDate)
+                //console.log('endDate', endDate)
+                //console.log('start', e)
                 const endTime = moment.utc(obj.end).format('HH:mm:ss')
                 const UTCstring = `${endDate}T${endTime}.000Z`
                 let endDateUTC = new Date(UTCstring)
-                //console.log(e)
-                const newDates = {
+                const newEvent = {
                     start: e,
                     end: endDateUTC,
                     summary: obj.summary,
                 }
-                //console.log(newDates)
-                return newDates
+
+                return newEvent
             })
         }
         else {
             newObj.push({ start: obj.start, end: obj.end, summary: obj.summary })
         }
 
-
         newObj.forEach(element => {
-            //console.log(new Date(Date.parse(element.end)))
-            console.log(element)
+            //console.log(element)
             const parsed = new Date(Date.parse(element.end))
             if (parsed - Date.now() > 0) {
                 //console.log(element)
@@ -230,12 +244,22 @@ const getUpcoming = (filter, obj) => {
 const timeDiff = (start, end) => {
     start = start.split(':')
     end = end.split(':')
-    const hour = end[0] - start[0] < 0
+
+    let hour = end[0] - start[0] < 0
         ? (end[0] - start[0]) + 24
         : end[0] - start[0]
+
+    let minute
+    if (end[1] - start[1] < 0) {
+        minute = end[1] - start[1] + 60
+        hour = hour - 1
+    }
+    else {
+        minute = end[1] - start[1]
+    }
     const result = [
         hour,
-        end[1] - start[1],
+        minute,
     ]
     return result
 }
@@ -247,29 +271,3 @@ const timeDiff = (start, end) => {
 http.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
 })
-
-//module.exports = app
-
-/*const events = dataArr.filter((a) => {
-            //console.log('a', a)
-            return a.type == 'VEVENT'
-        })
-
-        console.log(events)
-
-        events.sort((a, b) => {
-            return new Date(a.start) - new Date(b.start)
-        })
-
-        const result = events.map(({ start, end, summary }) => {
-            const startLocal = start.setHours(start.getHours() - 4)
-            const endLocal = end.setHours(end.getHours() - 4)
-            return { start, end, summary }
-        })
-
-        const upcoming = result.filter(({ start }) => {
-            const now = Date.now()
-            console.log(now)
-            console.log(start - now)
-            return (start - now > 0)
-        })*/

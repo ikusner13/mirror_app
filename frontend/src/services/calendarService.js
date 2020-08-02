@@ -25,7 +25,8 @@ const getTime = (events) => {
             nextDay: '[Tomorrow]',
             nextWeek: 'dddd',
             sameElse: function () {
-                const fromNow = moment(element.startLocal[0]).startOf('day').fromNow()
+                console.log(moment(element.startLocal[0]).endOf('day').fromNow())
+                const fromNow = moment(element.startLocal[0]).endOf('day').fromNow()
                 return "[" + fromNow + "]"
             }
         })
