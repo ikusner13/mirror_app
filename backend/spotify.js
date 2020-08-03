@@ -1,7 +1,6 @@
 const SpotifyWebApi = require('spotify-web-api-node')
 
 const { spotify } = require('../config')
-//const { config } = require('./server')
 
 //SPOTIFY SETUP
 var client_id = spotify.client_id // Your client id
@@ -24,22 +23,21 @@ spotifyApi.setRefreshToken(refresh_token)
 const config = {
   CURRENT_PULL: 3000,
   MIN_PULL: 3000,
-  CALENDAR_PULL: 100000000, //300000
 }
 
-const setNowPlaying = async () => {
+const setNowPlaying = async (SOCKET) => {
   spotifyApi
     .getMyCurrentPlaybackState({})
     .then((result) => {
       config.CURRENT_PULL = config.MIN_PULL
       //if body return something (is playing)
       if (Object.keys(result.body).length > 0) {
-        config.SOCKET.emit('getPlayBackState', sendablePayload(result.body))
+        SOCKET.emit('getPlayBackState', sendablePayload(result.body))
         calls = 0
       }
       // isn't playing or has been paused for too long
       else {
-        config.SOCKET.emit('getPlayBackState', { noSong: true })
+        SOCKET.emit('getPlayBackState', { noSong: true })
       }
     })
     .catch((error) => {
@@ -52,7 +50,7 @@ const setNowPlaying = async () => {
       }
     })
 
-  setTimeout(setNowPlaying, config.CURRENT_PULL)
+  setTimeout(setNowPlaying.bind(null, SOCKET), config.CURRENT_PULL)
 }
 
 const getImgUrl = (images) => {
@@ -94,4 +92,8 @@ const refresh = async () => {
   } catch (err) {
     console.log(err.message)
   }
+}
+
+module.exports = {
+  setNowPlaying,
 }

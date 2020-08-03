@@ -3,15 +3,20 @@ const request = require('request')
 const moment = require('moment')
 
 //calendar
+const config = {
+  CALENDAR_PULL: 5000,
+}
 const ical_uri =
   'https://calendar.google.com/calendar/ical/splgvglb55q2kpbnjbsrab75f4%40group.calendar.google.com/private-928abe1b658ce5021f7b473cef3a6faf/basic.ics'
-const getICS = async () => {
+const getICS = async (SOCKET) => {
   let events = []
   request(ical_uri, (err, r, Rdata) => {
     const data = ical.parseICS(Rdata)
 
     const dataArr = Object.values(data)
 
+    //get events that are upcoming in next 14 days
+    //convert event times to local time
     events = dataArr.reduce(getUpcoming, []).map(({ start, end, summary }) => {
       let startLocal = start.toLocaleString().split(' ')
       let endLocal = end.toLocaleString().split(' ')
@@ -22,10 +27,10 @@ const getICS = async () => {
       return { startLocal, endLocal, summary }
     })
 
-    console.log('events', events)
-    config.SOCKET.emit('getEvents', events)
+    //console.log('events', events)
+    SOCKET.emit('getEvents', events)
 
-    setTimeout(getICS, config.CALENDAR_PULL)
+    setTimeout(getICS.bind(null, SOCKET), config.CALENDAR_PULL)
   })
 }
 
@@ -34,12 +39,16 @@ const getUpcoming = (filter, obj) => {
   if (obj.type === 'VEVENT') {
     if (obj.rrule) {
       const rule = obj.rrule
+
+      //get all upcoming recurring events within time frame
       const past = moment().startOf('day').toDate()
       const future = moment().add(14, 'd').toDate()
-
-      rule.options.dtstart = past
+      rule.options.dtstart = past //fixes event from not showing up on current day
       let dates = rule.between(past, future, true)
 
+      //if event is planned between 8pm and 12am EST, then rule.between will
+      //change event to UTC, but wont adjust date correctly
+      //so add 1 to date to offset this
       if (
         typeof dates[0] !== 'undefined' &&
         new Date(dates[0]).getUTCHours() < 4
@@ -49,13 +58,15 @@ const getUpcoming = (filter, obj) => {
         })
       }
 
+      //sets events with proper start and end times
       newObj = dates.map((e) => {
         let start = moment(e).local().format('HH:mm')
         let end = moment(obj.end).local().format('HH:mm')
 
         const diff = timeDiff(start, end)
-        console.log(diff)
-        //console.log(moment(e).local().format('HH:mm'))
+
+        //if all day event, add 1 day to start date
+        //if other recurring event, add event duration to start time
         let endDate = obj.start.dateOnly
           ? moment.utc(e).add(1, 'd').format('YYYY-MM-DD')
           : moment
@@ -64,8 +75,6 @@ const getUpcoming = (filter, obj) => {
               .add(diff[1], 'minute')
               .add(diff[2], 'second')
               .format('YYYY-MM-DD')
-        //console.log('endDate', endDate)
-        //console.log('start', e)
         const endTime = moment.utc(obj.end).format('HH:mm:ss')
         const UTCstring = `${endDate}T${endTime}.000Z`
         let endDateUTC = new Date(UTCstring)
@@ -81,6 +90,7 @@ const getUpcoming = (filter, obj) => {
       newObj.push({ start: obj.start, end: obj.end, summary: obj.summary })
     }
 
+    //if event hasnt happend or hasnt ended, then add
     newObj.forEach((element) => {
       //console.log(element)
       const parsed = new Date(Date.parse(element.end))
@@ -95,6 +105,8 @@ const getUpcoming = (filter, obj) => {
   })
 }
 
+// get difference between two times
+// timeDiff(01:30, 13:45) -> [12,15]
 const timeDiff = (start, end) => {
   start = start.split(':')
   end = end.split(':')
@@ -110,4 +122,8 @@ const timeDiff = (start, end) => {
   }
   const result = [hour, minute]
   return result
+}
+
+module.exports = {
+  getICS,
 }

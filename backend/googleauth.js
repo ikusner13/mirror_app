@@ -1,5 +1,4 @@
 const { google } = require('googleapis')
-const cors = require('cors')
 const opn = require('open')
 const auth = require('./auth.json')
 const readLine = require('readline')
@@ -39,8 +38,8 @@ fs.readFile('auth.json', (err, content) => {
 })
 
 const authorize = (creds, callback) => {
-  console.log('creds', creds)
-  console.log('callback', callback)
+  //console.log('creds', creds)
+  //console.log('callback', callback)
   //console.log('authorize')
   const { client_id, client_secret, redirect_uris } = creds.installed
   const oAuth2Client = new google.auth.OAuth2(
@@ -49,10 +48,10 @@ const authorize = (creds, callback) => {
     redirect_uris[0],
   )
   oAuth2Client.on('tokens', (tokens) => {
-    /*fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
+    fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
       if (err) return console.error('err')
       console.log('Token stored to', TOKEN_PATH)
-    })*/
+    })
     console.log('token on ', tokens)
   })
 
@@ -61,7 +60,7 @@ const authorize = (creds, callback) => {
       return getAccessToken(oAuth2Client, callback)
     }
     oAuth2Client.setCredentials(JSON.parse(token))
-    if (oAuth2Client.credentials.expiry_date < Date.now()) {
+    /*if (oAuth2Client.credentials.expiry_date < Date.now()) {
       console.log('refresh')
       oAuth2Client.refreshAccessToken().then((tk) => {
         //console.log('tk', tk.credentials)
@@ -75,7 +74,8 @@ const authorize = (creds, callback) => {
     } else {
       //console.log('creds', oAuth2Client.credentials.access_token)
       callback(oAuth2Client)
-    }
+    }*/
+    callback(oAuth2Client)
   })
 
   //console.log('creds', creds)
@@ -139,6 +139,7 @@ const getPhotos = async (auth) => {
     //console.log('photo urls', photoUrls.length)
     const url = randPhoto(photoUrls)
     console.log(url)
+    console.log('#################')
   } catch (error) {
     console.log(error)
   }
