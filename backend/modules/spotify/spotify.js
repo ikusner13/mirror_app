@@ -1,6 +1,8 @@
 const SpotifyWebApi = require('spotify-web-api-node')
 
-const { spotify } = require('../config')
+//const { spotify } = require('../../../config')
+const spotify = require('./auth')
+let { CURRENT_PULL, MIN_PULL } = require('./config')
 
 //SPOTIFY SETUP
 var client_id = spotify.client_id // Your client id
@@ -20,16 +22,11 @@ let tokenExpirationEpoch = new Date().getTime() / 1000 + 3600
 spotifyApi.setAccessToken(access_token)
 spotifyApi.setRefreshToken(refresh_token)
 
-const config = {
-  CURRENT_PULL: 3000,
-  MIN_PULL: 3000,
-}
-
 const setNowPlaying = async (SOCKET) => {
   spotifyApi
     .getMyCurrentPlaybackState({})
     .then((result) => {
-      config.CURRENT_PULL = config.MIN_PULL
+      CURRENT_PULL = MIN_PULL
       //if body return something (is playing)
       if (Object.keys(result.body).length > 0) {
         SOCKET.emit('getPlayBackState', sendablePayload(result.body))
@@ -45,12 +42,11 @@ const setNowPlaying = async (SOCKET) => {
       if (error.message === 'Unauthorized') {
         refresh()
       } else {
-        config.CURRENT_PULL =
-          config.CURRENT_PULL < 5000 ? config.CURRENT_PULL + 1000 : 5000
+        CURRENT_PULL = CURRENT_PULL < 5000 ? CURRENT_PULL + 1000 : 5000
       }
     })
 
-  setTimeout(setNowPlaying.bind(null, SOCKET), config.CURRENT_PULL)
+  setTimeout(setNowPlaying.bind(null, SOCKET), CURRENT_PULL)
 }
 
 const getImgUrl = (images) => {

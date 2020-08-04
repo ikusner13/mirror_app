@@ -1,16 +1,11 @@
 const ical = require('ical')
 const request = require('request')
 const moment = require('moment')
-
+const { CALENDAR_PULL, ical_url } = require('./config')
 //calendar
-const config = {
-  CALENDAR_PULL: 5000,
-}
-const ical_uri =
-  'https://calendar.google.com/calendar/ical/splgvglb55q2kpbnjbsrab75f4%40group.calendar.google.com/private-928abe1b658ce5021f7b473cef3a6faf/basic.ics'
 const getICS = async (SOCKET) => {
   let events = []
-  request(ical_uri, (err, r, Rdata) => {
+  request(ical_url, (err, r, Rdata) => {
     const data = ical.parseICS(Rdata)
 
     const dataArr = Object.values(data)
@@ -30,7 +25,7 @@ const getICS = async (SOCKET) => {
     //console.log('events', events)
     SOCKET.emit('getEvents', events)
 
-    setTimeout(getICS.bind(null, SOCKET), config.CALENDAR_PULL)
+    setTimeout(getICS.bind(null, SOCKET), CALENDAR_PULL)
   })
 }
 
