@@ -1,10 +1,9 @@
 const { google } = require('googleapis')
 const opn = require('open')
-const auth = require('./auth.json')
+//const auth = require('./auth.json')
 const readLine = require('readline')
 const fs = require('fs')
 const fetch = require('node-fetch')
-
 /*const config = {
   client_id: auth.installed.client_id,
   client_secret: auth.installed.client_secret,
@@ -31,36 +30,33 @@ const scopes = [
   'https://www.googleapis.com/auth/photoslibrary',
   'https://www.googleapis.com/auth/photoslibrary.sharing',
 ]
-
-fs.readFile('auth.json', (err, content) => {
-  if (err) return console.log('Error loading client file:', err)
-  authorize(JSON.parse(content), getPhotos)
-})
-
-const authorize = (creds, callback) => {
-  //console.log('creds', creds)
-  //console.log('callback', callback)
-  //console.log('authorize')
+const googlePhotos = (socket) => {
+  fs.readFile('auth.json', (err, content) => {
+    if (err) return console.log('Error loading client file:', err)
+    authorize(JSON.parse(content), getPhotos, socket)
+  })
+}
+const authorize = (creds, callback, socket) => {
   const { client_id, client_secret, redirect_uris } = creds.installed
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
     redirect_uris[0],
   )
-  oAuth2Client.on('tokens', (tokens) => {
+  /*oAuth2Client.on('tokens', (tokens) => {
     fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
       if (err) return console.error('err')
       console.log('Token stored to', TOKEN_PATH)
     })
     console.log('token on ', tokens)
-  })
+  })*/
 
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) {
-      return getAccessToken(oAuth2Client, callback)
+      return getAccessToken(oAuth2Client, callback, socket)
     }
     oAuth2Client.setCredentials(JSON.parse(token))
-    /*if (oAuth2Client.credentials.expiry_date < Date.now()) {
+    if (oAuth2Client.credentials.expiry_date < Date.now()) {
       console.log('refresh')
       oAuth2Client.refreshAccessToken().then((tk) => {
         //console.log('tk', tk.credentials)
@@ -69,20 +65,20 @@ const authorize = (creds, callback) => {
           if (err) return console.error('err')
           console.log('Token stored to', TOKEN_PATH)
         })
-        callback(oAuth2Client)
+        callback(oAuth2Client, socket)
       })
     } else {
       //console.log('creds', oAuth2Client.credentials.access_token)
-      callback(oAuth2Client)
-    }*/
-    callback(oAuth2Client)
+      callback(oAuth2Client, socket)
+    }
+    //callback(oAuth2Client)
   })
 
   //console.log('creds', creds)
-  setTimeout(authorize.bind(null, creds, callback), CALL_TIME)
+  setTimeout(authorize.bind(null, creds, callback, socket), CALL_TIME)
 }
 
-const getAccessToken = (oAuth2Client, callback) => {
+const getAccessToken = (oAuth2Client, callback, socket) => {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,
@@ -110,7 +106,7 @@ const getAccessToken = (oAuth2Client, callback) => {
   })
 }
 
-const getPhotos = async (auth) => {
+const getPhotos = async (auth, socket) => {
   const body = {
     pageSize: 100,
     albumId:
@@ -138,6 +134,7 @@ const getPhotos = async (auth) => {
     //console.log('photos', photos)
     //console.log('photo urls', photoUrls.length)
     const url = randPhoto(photoUrls)
+    socket.emit('googlePhotos', url)
     console.log(url)
     console.log('#################')
   } catch (error) {
@@ -148,4 +145,8 @@ const getPhotos = async (auth) => {
 const randPhoto = (photos) => {
   const photo = photos[Math.floor(Math.random() * photos.length)]
   return photo
+}
+
+module.exports = {
+  googlePhotos,
 }

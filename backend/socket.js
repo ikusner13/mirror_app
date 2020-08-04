@@ -1,6 +1,6 @@
 const spotify = require('./spotify')
 const calendar = require('./calendar')
-//const googlePhotos = require('./googleauth')
+const { googlePhotos } = require('./googleauth')
 
 module.exports = {
   startSocket: function (server) {
@@ -16,6 +16,7 @@ module.exports = {
         //stops multiple socket connections from calling fetch loop
         spotify.setNowPlaying(socket)
         calendar.getICS(socket)
+        googlePhotos(socket)
       }
     })
   },
