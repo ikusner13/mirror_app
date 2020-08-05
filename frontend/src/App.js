@@ -32,7 +32,9 @@ function App() {
         </Row>
 
         <Row className="second-bottom message-size">
-          <Col md={{ span: 11, offset: 0 }} className="text-center"></Col>
+          <Col md={{ span: 11, offset: 0 }} className="text-center">
+            <Message />
+          </Col>
         </Row>
 
         <Row className="bottom ">
