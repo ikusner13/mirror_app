@@ -1,7 +1,8 @@
 const SpotifyWebApi = require('spotify-web-api-node')
-
-//const { spotify } = require('../../../config')
-const spotify = require('./auth')
+const config = require('../../../config/config')
+const spotify = config.modules.find((obj) => {
+  return obj.module === 'spotify'
+}).config
 let { CURRENT_PULL, MIN_PULL } = require('./config')
 
 //SPOTIFY SETUP
@@ -21,7 +22,6 @@ let tokenExpirationEpoch = new Date().getTime() / 1000 + 3600
 
 spotifyApi.setAccessToken(access_token)
 spotifyApi.setRefreshToken(refresh_token)
-
 const setNowPlaying = async (SOCKET) => {
   spotifyApi
     .getMyCurrentPlaybackState({})
