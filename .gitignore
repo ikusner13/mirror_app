@@ -4,4 +4,3 @@ node_modules
 auth.json
 auth.js
 token.json
-config.js

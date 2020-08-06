@@ -10,7 +10,7 @@ const {
   call_time,
   scopes,
   albumTitle,
-} = require('../../../config').modules.find((obj) => {
+} = require('../../../config/config').modules.find((obj) => {
   return obj.module === 'googlePhotos'
 }).config
 

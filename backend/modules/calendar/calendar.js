@@ -2,7 +2,7 @@ const ical = require('ical')
 const request = require('request')
 const moment = require('moment')
 // const { CALENDAR_PULL, ical_url } = require('./config')
-const { ical_url, pull_rate } = require('../../../config').modules.find(
+const { ical_url, pull_rate } = require('../../../config/config').modules.find(
   (obj) => {
     return obj.module === 'calendar'
   },

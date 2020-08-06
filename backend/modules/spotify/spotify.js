@@ -1,5 +1,5 @@
 const SpotifyWebApi = require('spotify-web-api-node')
-const config = require('../../../config')
+const config = require('../../../config/config')
 const spotify = config.modules.find((obj) => {
   return obj.module === 'spotify'
 }).config

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
 //const io = require('socket.io')(http)
-const { port } = require('../config')
+const { port } = require('../config/config')
 const path = require('path')
 const sockets = require('./socket')
 
