@@ -3,8 +3,18 @@ const opn = require('open')
 const readLine = require('readline')
 const fs = require('fs')
 const fetch = require('node-fetch')
-const { TOKEN_PATH, CALL_TIME, scopes, albumTitle } = require('./config')
-const { randPhoto } = require('./helpers')
+// const { TOKEN_PATH, CALL_TIME, scopes, albumTitle } = require('./config')
+const { randPhoto, calculateTimeTil } = require('./helpers')
+const {
+  token_path,
+  call_time,
+  scopes,
+  albumTitle,
+} = require('../../../config').modules.find((obj) => {
+  return obj.module === 'googlePhotos'
+}).config
+
+const CALL_TIME = calculateTimeTil(call_time)
 
 const googlePhotos = (socket) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms))
@@ -22,7 +32,7 @@ const googlePhotos = (socket) => {
       redirect_uris[0],
     )
 
-    fs.readFile(TOKEN_PATH, (err, token) => {
+    fs.readFile(__dirname + token_path, (err, token) => {
       if (err) {
         return getAccessToken(oAuth2Client, callback)
       }
@@ -30,10 +40,14 @@ const googlePhotos = (socket) => {
       if (oAuth2Client.credentials.expiry_date < Date.now()) {
         oAuth2Client.refreshAccessToken().then((tk) => {
           const tokens = tk.credentials
-          fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
-            if (err) return console.error('err')
-            console.log('Token stored to', TOKEN_PATH)
-          })
+          fs.writeFile(
+            __dirname + token_path,
+            JSON.stringify(tokens),
+            (err) => {
+              if (err) return console.error('err')
+              console.log('Token stored to', token_path)
+            },
+          )
           callback(oAuth2Client)
         })
       } else {
@@ -63,9 +77,9 @@ const googlePhotos = (socket) => {
       oAuth2Client.getToken(code, (err, token) => {
         if (err) return console.error('Error retrieving access token', err)
         oAuth2Client.setCredentials(token)
-        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+        fs.writeFile(__dirname + token_path, JSON.stringify(token), (err) => {
           if (err) return console.error('err')
-          console.log('Token stored to', TOKEN_PATH)
+          console.log('Token stored to', token_path)
         })
         callback(oAuth2Client)
       })
@@ -86,12 +100,13 @@ const googlePhotos = (socket) => {
       )
       let data = await album.json()
       const albums = data.albums
-      for (let album of albums) {
-        if (album.title === albumTitle) {
-          return getPhotosFromAlbum(auth, album.id)
+      if (Array.isArray(albums)) {
+        for (let album of albums) {
+          if (album.title === albumTitle) {
+            return getPhotosFromAlbum(auth, album.id)
+          }
         }
       }
-
       if (data.nextPageToken) {
         await delay(500)
         getPhotos(auth)

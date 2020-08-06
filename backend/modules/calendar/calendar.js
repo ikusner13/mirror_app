@@ -1,7 +1,12 @@
 const ical = require('ical')
 const request = require('request')
 const moment = require('moment')
-const { CALENDAR_PULL, ical_url } = require('./config')
+// const { CALENDAR_PULL, ical_url } = require('./config')
+const { ical_url, pull_rate } = require('../../../config').modules.find(
+  (obj) => {
+    return obj.module === 'calendar'
+  },
+).config
 //calendar
 const getICS = async (SOCKET) => {
   let events = []
@@ -25,7 +30,7 @@ const getICS = async (SOCKET) => {
     //console.log('events', events)
     SOCKET.emit('getEvents', events)
 
-    setTimeout(getICS.bind(null, SOCKET), CALENDAR_PULL)
+    setTimeout(getICS.bind(null, SOCKET), pull_rate)
   })
 }
 

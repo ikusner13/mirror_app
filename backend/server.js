@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
 //const io = require('socket.io')(http)
-const { PORT } = require('../config')
+const { port } = require('../config')
 const path = require('path')
 const sockets = require('./socket')
 
@@ -30,6 +30,6 @@ app.use(function (req, res, next) {
 app.use(express.static('build'))
 
 sockets.startSocket(http)
-http.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`)
+http.listen(port, () => {
+  console.log(`listening on port ${port}`)
 })
