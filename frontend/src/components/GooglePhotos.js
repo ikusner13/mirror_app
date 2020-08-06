@@ -12,7 +12,11 @@ const GooglePhotos = () => {
 
   return (
     <div className="float-right">
-      <img src={photo} alt="paige" width="300" height="300"></img>
+      {photo ? (
+        <img src={photo} alt="paige" width="300" height="300"></img>
+      ) : (
+        <img src="./png/pige.png" alt="paige" width="300" height="300"></img>
+      )}
     </div>
   )
 }
