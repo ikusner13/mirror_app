@@ -31,8 +31,6 @@ const currentSet = () => {
 }
 
 const getHoliday = () => {
-  console.log(Messages)
-  console.log(Messages.holidays)
   const date = moment().format('MM-DD').toString()
 
   if (Messages.holidays.hasOwnProperty(date)) {
