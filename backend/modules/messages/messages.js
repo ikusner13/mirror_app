@@ -1,4 +1,4 @@
-const { Messages } = require('./messagelist')
+const { Messages } = require('./messageList')
 const moment = require('moment')
 const helper = require('./helper')
 
