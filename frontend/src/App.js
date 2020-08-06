@@ -1,26 +1,33 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 import Clock from './components/Clock'
 import Date from './components/Date'
 import Dog from './components/Dogs'
 import CurrentWeather from './components/CurrentWeather'
 import Spotify from './components/Spotify'
 import Message from './components/Message'
+import Calendar from './components/Calendar'
+import GooglePhotos from './components/GooglePhotos'
 
-import { Row, Col, Container } from "react-bootstrap"
+import { Row, Col, Container } from 'react-bootstrap'
 
 function App() {
   return (
-    <div >
+    <div>
       <Container fluid={true}>
-
-        <Row className="" >
-          <Col md={6} className="" >
+        <Row className="">
+          <Col md={6} className="">
             <Date className="Date" />
             <Clock className="Clock" />
           </Col>
           <Col md={{ span: 4, offset: 2 }} className="text-right">
             <CurrentWeather />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <Calendar />
           </Col>
         </Row>
 
@@ -30,17 +37,17 @@ function App() {
           </Col>
         </Row>
 
-        <Row className="bottom " >
-          <Col md={6} className="spotify mt-auto" >
+        <Row className="bottom ">
+          <Col md={6} className="spotify mt-auto">
             <Spotify />
           </Col>
-          <Col md={{ span: 3, offset: 3 }} className="" >
-            <Dog />
+          <Col md={{ span: 3, offset: 3 }} className="">
+            <GooglePhotos />
           </Col>
         </Row>
       </Container>
-    </div >
-  );
+    </div>
+  )
 }
 
-export default App;
+export default App
