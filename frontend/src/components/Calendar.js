@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-//import io from 'socket.io-client'
 import socket from '../services/socket'
-import { firstFive, getTime } from '../services/calendarService'
-import moment from 'moment'
+import { firstFive } from '../services/calendarService'
 const Calendar = () => {
   const [events, setEvents] = useState([])
 

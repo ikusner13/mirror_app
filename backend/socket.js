@@ -1,6 +1,7 @@
 const spotify = require('./modules/spotify')
 const calendar = require('./modules/calendar')
 const google = require('./modules/googlePhotos')
+const messages = require('./modules/messages')
 
 module.exports = {
   startSocket: function (server) {
@@ -17,6 +18,7 @@ module.exports = {
         spotify.setNowPlaying(socket)
         calendar.getICS(socket)
         google.googlePhotos(socket)
+        messages.getMessages(socket)
       }
     })
   },
