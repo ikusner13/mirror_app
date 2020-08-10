@@ -3,25 +3,23 @@ const opn = require('open')
 const readLine = require('readline')
 const fs = require('fs')
 const fetch = require('node-fetch')
-// const { TOKEN_PATH, CALL_TIME, scopes, albumTitle } = require('./config')
+const moment = require('moment')
 const { randPhoto, calculateTimeTil } = require('./helpers')
 const {
   token_path,
-  call_time,
   scopes,
   albumTitle,
 } = require('../../../config/config').modules.find((obj) => {
   return obj.module === 'googlePhotos'
 }).config
-
-const CALL_TIME = calculateTimeTil(call_time)
-
+let CALL_TIME = 0
+let lastPhoto = '0'
 const googlePhotos = (socket) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 
   fs.readFile(__dirname + '/auth.json', (err, content) => {
     if (err) return console.log('Error loading client file:', err)
-    authorize(JSON.parse(content), getPhotos)
+    authorize(JSON.parse(content), getAlbum)
   })
 
   const authorize = (creds, callback) => {
@@ -55,7 +53,8 @@ const googlePhotos = (socket) => {
       }
     })
 
-    // console.log('timeout')
+    let nextHour = moment().add(1, 'hour').hour()
+    CALL_TIME = calculateTimeTil(nextHour)
     setTimeout(authorize.bind(null, creds, callback), CALL_TIME)
   }
 
@@ -86,7 +85,7 @@ const googlePhotos = (socket) => {
     })
   }
 
-  const getPhotos = async (auth) => {
+  const getAlbum = async (auth) => {
     try {
       const album = await fetch(
         'https://photoslibrary.googleapis.com/v1/albums',
@@ -109,7 +108,7 @@ const googlePhotos = (socket) => {
       }
       if (data.nextPageToken) {
         await delay(500)
-        getPhotos(auth)
+        getAlbum(auth)
       } else {
         return console.log('no matching albums')
       }
@@ -119,7 +118,6 @@ const googlePhotos = (socket) => {
   }
 
   const getPhotosFromAlbum = async (auth, albumId) => {
-    //console.log(auth)
     let photoUrls = []
     const fetchPhotos = async (pageToken = '') => {
       let body = {
@@ -148,18 +146,18 @@ const googlePhotos = (socket) => {
       }
 
       if (photos.nextPageToken) {
-        //await delay(500)
+        await delay(500)
         fetchPhotos(photos.nextPageToken)
       } else {
-        // console.log('photo urls', photoUrls.length)
-        const url = randPhoto(photoUrls)
+        const url = randPhoto(photoUrls, lastPhoto)
+        lastPhoto = url
         socket.emit('googlePhotos', url)
       }
     }
     fetchPhotos()
   }
 }
-
+// googlePhotos(0)
 module.exports = {
   googlePhotos,
 }

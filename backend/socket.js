@@ -2,7 +2,6 @@ const spotify = require('./modules/spotify')
 const calendar = require('./modules/calendar')
 const google = require('./modules/googlePhotos')
 const messages = require('./modules/messages')
-
 module.exports = {
   startSocket: function (server) {
     const io = require('socket.io')(server)
@@ -22,4 +21,5 @@ module.exports = {
       }
     })
   },
+  // sendUpdate: function (notification, data) {},
 }

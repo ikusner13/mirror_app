@@ -6,7 +6,7 @@ import weather_day_icons from '../jsons/weather-day-icons'
 import weather_night_icons from '../jsons/weather-nigh-icons'
 
 const defaults = {
-  updateTime: 15,
+  updateTime: 10,
   ZIP: '44240',
   api_key: 'b8d8163c79b9574cc193215f73d445c9',
   day: weather_day_icons,
