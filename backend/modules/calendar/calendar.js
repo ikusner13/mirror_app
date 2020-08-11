@@ -121,7 +121,7 @@ const endTime = (event, firstEvent) => {
   let endDateUTC = new Date(UTCstring)
   return endDateUTC
 }
-getICS(0)
+// getICS(0)
 module.exports = {
   getICS,
 }
