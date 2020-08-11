@@ -1,4 +1,5 @@
 const SpotifyWebApi = require('spotify-web-api-node')
+const moment = require('moment')
 const config = require('../../../config/config')
 const spotify = config.modules.find((obj) => {
   return obj.module === 'spotify'
@@ -18,34 +19,36 @@ const spotifyApi = new SpotifyWebApi({
   redirectUri: redirect_uri,
 })
 
-let tokenExpirationEpoch = new Date().getTime() / 1000 + 3600
+let tokenExpirationEpoch = moment()
 
 spotifyApi.setAccessToken(access_token)
 spotifyApi.setRefreshToken(refresh_token)
 const setNowPlaying = async (SOCKET) => {
-  spotifyApi
-    .getMyCurrentPlaybackState({})
-    .then((result) => {
-      CURRENT_PULL = MIN_PULL
-      //if body return something (is playing)
-      if (Object.keys(result.body).length > 0) {
-        SOCKET.emit('getPlayBackState', sendablePayload(result.body))
-        calls = 0
-      }
-      // isn't playing or has been paused for too long
-      else {
-        SOCKET.emit('getPlayBackState', { noSong: true })
-      }
-    })
-    .catch((error) => {
-      console.error(error)
-      if (error.message === 'Unauthorized') {
-        refresh()
-      } else {
-        CURRENT_PULL = CURRENT_PULL < 5000 ? CURRENT_PULL + 1000 : 5000
-      }
-    })
-
+  if (moment().isBefore(tokenExpirationEpoch)) {
+    spotifyApi
+      .getMyCurrentPlaybackState({})
+      .then((result) => {
+        CURRENT_PULL = MIN_PULL
+        //if body return something (is playing)
+        if (Object.keys(result.body).length > 0) {
+          SOCKET.emit('getPlayBackState', sendablePayload(result.body))
+        }
+        // isn't playing or has been paused for too long
+        else {
+          SOCKET.emit('getPlayBackState', { noSong: true })
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        if (error.message === 'Unauthorized') {
+          refresh()
+        } else {
+          CURRENT_PULL = CURRENT_PULL < 5000 ? CURRENT_PULL + 1000 : 5000
+        }
+      })
+  } else {
+    refresh()
+  }
   setTimeout(setNowPlaying.bind(null, SOCKET), CURRENT_PULL)
 }
 
@@ -78,13 +81,7 @@ const refresh = async () => {
   try {
     const newToken = await spotifyApi.refreshAccessToken()
     spotifyApi.setAccessToken(newToken.body['access_token'])
-    tokenExpirationEpoch =
-      new Date().getTime() / 1000 + newToken.body['expires_in']
-    /*console.log(
-            'Refreshed token. It now expires in ' +
-            Math.floor(tokenExpirationEpoch - new Date().getTime() / 1000) +
-            ' seconds!'
-        );*/
+    tokenExpirationEpoch = moment().add(newToken.body.expires_in, 'second')
   } catch (err) {
     console.log(err.message)
   }
