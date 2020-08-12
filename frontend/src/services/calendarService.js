@@ -27,8 +27,16 @@ const getTime = (events) => {
     if (element.startLocal[1] === element.endLocal[1]) {
       element.allDay = true
     }
+    if (isBirthday(element)) {
+      element.birthday = true
+    }
   })
   return newEvents
+}
+
+const isBirthday = (event) => {
+  const summary = event.summary.toLowerCase()
+  return summary.includes('birthday') || summary.includes('bday')
 }
 
 export { firstFive, getTime }

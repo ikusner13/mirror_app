@@ -18,10 +18,15 @@ const Calendar = () => {
           const period = item.startLocal[2]
           const summary = item.summary
           const isAllDay = item.allDay
+          const isBirthday = item.birthday
           return (
             <li key={index} className="events">
               <div>
-                <i className="fa fa-calendar-o" aria-hidden="true"></i>
+                {isBirthday ? (
+                  <i className="fa fa-birthday-cake" aria-hidden="true"></i>
+                ) : (
+                  <i className="fa fa-calendar-o" aria-hidden="true"></i>
+                )}
                 <>{summary}</>
               </div>
               <div className="dayTime">
