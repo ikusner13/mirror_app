@@ -13,7 +13,7 @@ const {
   return obj.module === 'googlePhotos'
 }).config
 let CALL_TIME = 0
-let lastPhoto = '0'
+let lastPhotos = []
 const googlePhotos = (socket) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 
@@ -149,8 +149,8 @@ const googlePhotos = (socket) => {
         await delay(500)
         fetchPhotos(photos.nextPageToken)
       } else {
-        const url = randPhoto(photoUrls, lastPhoto)
-        lastPhoto = url
+        const url = randPhoto(photoUrls, lastPhotos)
+        lastPhotos.push(url)
         socket.emit('googlePhotos', url)
       }
     }

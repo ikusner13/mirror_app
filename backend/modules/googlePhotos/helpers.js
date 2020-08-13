@@ -9,9 +9,9 @@ const calculateTimeTil = (hour) => {
 
   return timeTil
 }
-const randPhoto = (photos, lastPhoto) => {
+const randPhoto = (photos, lastPhotos) => {
   const photo = photos[Math.floor(Math.random() * photos.length)]
-  return photo === lastPhoto ? randPhoto(photos, lastPhoto) : photo
+  return lastPhotos.includes(photo) ? randPhoto(photos, lastPhotos) : photo
 }
 
 module.exports = {
