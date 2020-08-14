@@ -56,7 +56,7 @@ const googlePhotos = (socket) => {
 
     let nextHour = moment().add(1, 'hour').hour()
     CALL_TIME = calculateTimeTil(nextHour)
-    setTimeout(authorize.bind(null, creds, callback), 5000)
+    setTimeout(authorize.bind(null, creds, callback), CALL_TIME)
   }
 
   const getAccessToken = (oAuth2Client, callback) => {
