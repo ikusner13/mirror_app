@@ -13,7 +13,8 @@ const {
   return obj.module === 'googlePhotos'
 }).config
 let CALL_TIME = 0
-let lastPhoto = '0'
+let lastPhotos = []
+let albumLength = 0
 const googlePhotos = (socket) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 
@@ -110,6 +111,7 @@ const googlePhotos = (socket) => {
         await delay(500)
         getAlbum(auth)
       } else {
+        console.log('albums', albums)
         return console.log('no matching albums')
       }
     } catch (error) {
@@ -149,8 +151,32 @@ const googlePhotos = (socket) => {
         await delay(500)
         fetchPhotos(photos.nextPageToken)
       } else {
-        const url = randPhoto(photoUrls, lastPhoto)
-        lastPhoto = url
+        if (lastPhotos.length === 0) {
+          for (let i = 0; i < photoUrls.length; i++) {
+            lastPhotos.push(i)
+          }
+          albumLength = photoUrls.length
+        }
+        if (albumLength !== photoUrls.length) {
+          if (albumLength < photoUrls.length) {
+            for (let i = albumLength; i < photoUrls.length; i++) {
+              lastPhotos.push(i)
+            }
+          } else {
+            lastPhotos.length = 0
+            for (let i = 0; i < photoUrls.length; i++) {
+              lastPhotos.push(i)
+            }
+          }
+          albumLength = photoUrls.length
+        }
+        const url = randPhoto(photoUrls, lastPhotos)
+        const PhotoUrlsIndex = photoUrls.indexOf(url)
+
+        const lastPhotosIndex = lastPhotos.indexOf(PhotoUrlsIndex)
+        if (lastPhotosIndex > -1) {
+          lastPhotos.splice(lastPhotosIndex, 1)
+        }
         socket.emit('googlePhotos', url)
       }
     }
