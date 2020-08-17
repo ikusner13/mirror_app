@@ -40,6 +40,7 @@ const googlePhotos = (socket) => {
         oAuth2Client
           .refreshAccessToken()
           .then((tk) => {
+            console.log('refreshed photo access token')
             const tokens = tk.credentials
             fs.writeFile(
               __dirname + token_path,
@@ -49,6 +50,7 @@ const googlePhotos = (socket) => {
                 console.log('Token stored to', token_path)
               },
             )
+            console.log('callback')
             callback(oAuth2Client)
           })
           .catch((err) => {
@@ -56,6 +58,7 @@ const googlePhotos = (socket) => {
             console.log('couldnt refresh token')
           })
       } else {
+        console.log('didnt expire callback')
         callback(oAuth2Client)
       }
     })
@@ -118,6 +121,7 @@ const googlePhotos = (socket) => {
         getAlbum(auth)
       } else {
         console.log('data', data)
+        console.log('auth', auth)
         return console.log('no matching albums')
       }
     } catch (error) {
