@@ -59,6 +59,8 @@ const googlePhotos = (socket) => {
           })
       } else {
         console.log('didnt expire callback')
+        console.log('token expire', oAuth2Client.credentials.expiry_date)
+        console.log('now', Date.now())
         callback(oAuth2Client)
       }
     })
@@ -120,8 +122,8 @@ const googlePhotos = (socket) => {
         await delay(500)
         getAlbum(auth)
       } else {
-        console.log('data', data)
-        console.log('auth', auth)
+        console.log('data', data.error.message)
+        console.log('auth', auth.credentials)
         return console.log('no matching albums')
       }
     } catch (error) {
