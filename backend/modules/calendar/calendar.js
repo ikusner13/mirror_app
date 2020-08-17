@@ -10,7 +10,7 @@ const { ical_url, pull_rate } = require('../../../config/config').modules.find(
 const getICS = async (SOCKET) => {
   let events = []
   request(ical_url, (err, r, Rdata) => {
-    if (err) console.error(err)
+    if (err) return console.error(err)
     const data = ical.parseICS(Rdata)
 
     const dataArr = Object.values(data)

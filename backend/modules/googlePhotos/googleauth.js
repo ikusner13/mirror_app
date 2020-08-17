@@ -37,18 +37,24 @@ const googlePhotos = (socket) => {
       }
       oAuth2Client.setCredentials(JSON.parse(token))
       if (oAuth2Client.credentials.expiry_date < Date.now()) {
-        oAuth2Client.refreshAccessToken().then((tk) => {
-          const tokens = tk.credentials
-          fs.writeFile(
-            __dirname + token_path,
-            JSON.stringify(tokens),
-            (err) => {
-              if (err) return console.error('err')
-              console.log('Token stored to', token_path)
-            },
-          )
-          callback(oAuth2Client)
-        })
+        oAuth2Client
+          .refreshAccessToken()
+          .then((tk) => {
+            const tokens = tk.credentials
+            fs.writeFile(
+              __dirname + token_path,
+              JSON.stringify(tokens),
+              (err) => {
+                if (err) return console.error('err')
+                console.log('Token stored to', token_path)
+              },
+            )
+            callback(oAuth2Client)
+          })
+          .catch((err) => {
+            console.log(err)
+            console.log('couldnt refresh token')
+          })
       } else {
         callback(oAuth2Client)
       }
