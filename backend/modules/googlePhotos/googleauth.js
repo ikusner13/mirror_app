@@ -117,7 +117,7 @@ const googlePhotos = (socket) => {
         await delay(500)
         getAlbum(auth)
       } else {
-        console.log('albums', albums)
+        console.log('data', data)
         return console.log('no matching albums')
       }
     } catch (error) {
