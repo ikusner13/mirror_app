@@ -37,7 +37,7 @@ function App() {
           </Col>
         </Row>
 
-        <Row className="bottom ">
+        <Row className="bottom">
           <Col md={6} className="spotify mt-auto">
             <Spotify />
           </Col>
