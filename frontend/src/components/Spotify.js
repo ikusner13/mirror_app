@@ -20,7 +20,7 @@ const Spotify = () => {
           src="./png/spotify.png"
           alt="spotify"
           width="150"
-          height="150"
+          height="50"
           className="top-buffer"
         ></img>
       </div>
