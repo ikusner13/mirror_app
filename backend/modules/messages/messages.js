@@ -5,8 +5,8 @@ const helper = require('./helper')
 const defaults = {
   morningStart: 8,
   morningEnd: 9,
+  afternoon2: 5,
   nightStart: 22,
-  nightEnd: 8,
 }
 const getRandomMessage = (messages) => {
   const length = messages.length - 1
@@ -22,7 +22,7 @@ const currentSet = () => {
     return getRandomMessage(messages.morning)
   } else if (
     hour >= defaults.nightStart ||
-    (hour >= 0 && hour < defaults.nightEnd)
+    (hour >= 0 && hour < defaults.morningStart)
   ) {
     return getRandomMessage(messages.evening)
   } else {
@@ -50,6 +50,7 @@ const getMessages = (socket) => {
 
   let time = helper.closestRefresh(
     defaults.morningStart,
+    defaults.afternoon2,
     defaults.morningEnd,
     defaults.nightStart,
   )
