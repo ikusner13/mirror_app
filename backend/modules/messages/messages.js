@@ -9,8 +9,8 @@ const defaults = {
   nightStart: 22,
 }
 const getRandomMessage = (messages) => {
-  const length = messages.length - 1
-  let randomMessage = Math.floor(Math.random() * length)
+  let randomMessage = Math.floor(Math.random() * messages.length)
+  console.log(messages.length)
 
   return messages[randomMessage]
 }
