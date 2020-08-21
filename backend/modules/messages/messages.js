@@ -1,13 +1,9 @@
 const { messages } = require('./messageList')
 const moment = require('moment')
 const helper = require('./helper')
-
-const defaults = {
-  morningStart: 8,
-  morningEnd: 9,
-  afternoon2: 5,
-  nightStart: 22,
-}
+const { defaults } = require('../../../config/config').modules.find((obj) => {
+  return obj.module === 'message'
+}).config
 const getRandomMessage = (messages) => {
   let randomMessage = Math.floor(Math.random() * messages.length)
   console.log(messages.length)
