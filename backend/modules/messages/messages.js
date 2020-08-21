@@ -1,16 +1,12 @@
 const { messages } = require('./messageList')
 const moment = require('moment')
 const helper = require('./helper')
-
-const defaults = {
-  morningStart: 8,
-  morningEnd: 9,
-  nightStart: 22,
-  nightEnd: 8,
-}
+const { defaults } = require('../../../config/config').modules.find((obj) => {
+  return obj.module === 'message'
+}).config
 const getRandomMessage = (messages) => {
-  const length = messages.length - 1
-  let randomMessage = Math.floor(Math.random() * length)
+  let randomMessage = Math.floor(Math.random() * messages.length)
+  console.log(messages.length)
 
   return messages[randomMessage]
 }
@@ -22,7 +18,7 @@ const currentSet = () => {
     return getRandomMessage(messages.morning)
   } else if (
     hour >= defaults.nightStart ||
-    (hour >= 0 && hour < defaults.nightEnd)
+    (hour >= 0 && hour < defaults.morningStart)
   ) {
     return getRandomMessage(messages.evening)
   } else {
@@ -50,6 +46,7 @@ const getMessages = (socket) => {
 
   let time = helper.closestRefresh(
     defaults.morningStart,
+    defaults.afternoon2,
     defaults.morningEnd,
     defaults.nightStart,
   )
