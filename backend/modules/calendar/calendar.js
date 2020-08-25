@@ -109,13 +109,11 @@ const endTime = (event, firstEvent) => {
 
   //if all day event, add 1 day to start date
   //if other recurring event, add event duration to start time
-  let endDate = firstEvent.start.dateOnly
-    ? moment.utc(event).add(1, 'd').format('YYYY-MM-DD')
-    : moment
-        .utc(event)
-        .add(diff[0], 'hour')
-        .add(diff[1], 'minute')
-        .format('YYYY-MM-DD')
+  let endDate = moment
+    .utc(event)
+    .add(diff[0], 'hour')
+    .add(diff[1], 'minute')
+    .format('YYYY-MM-DD')
   const endTime = moment.utc(firstEvent.end).format('HH:mm:ss')
   const UTCstring = `${endDate}T${endTime}.000Z`
   let endDateUTC = new Date(UTCstring)
