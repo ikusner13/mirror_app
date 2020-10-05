@@ -39,7 +39,7 @@ const setNowPlaying = async (SOCKET) => {
         }
       })
       .catch((error) => {
-        console.error(error)
+        // console.error(error)
         if (error.message === 'Unauthorized') {
           refresh()
         } else {

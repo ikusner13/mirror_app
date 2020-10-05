@@ -10,7 +10,7 @@ messages['lastAfternoonIndex'] = -1
 messages['lastEveningIndex'] = -1
 
 const getRandomMessage = (set, key) => {
-  console.log('timeIndex', messages[key])
+  // console.log('timeIndex', messages[key])
   let randomMessage = Math.floor(Math.random() * set.length)
 
   while (randomMessage === messages[key]) {
@@ -46,7 +46,7 @@ const getHoliday = () => {
 }
 
 const getMessages = (socket) => {
-  console.log('new message', moment().format())
+  // console.log('new message', moment().format())
   if (getHoliday() !== null) {
     const holiday = getHoliday()
     socket.emit('message', holiday)
@@ -61,8 +61,8 @@ const getMessages = (socket) => {
     defaults.morningEnd,
     defaults.nightStart,
   )
-  console.log('time', new Date(new Date().getTime() + time).toLocaleString())
-  setTimeout(getMessages.bind(null, socket), 5000)
+  // console.log('time', new Date(new Date().getTime() + time).toLocaleString())
+  setTimeout(getMessages.bind(null, socket), time)
 }
 
 // getMessages(0)

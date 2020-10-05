@@ -26,7 +26,7 @@ const getICS = async (SOCKET) => {
 
       return { startLocal, endLocal, summary }
     })
-    console.log('return', events)
+    // console.log('return', events)
     SOCKET.emit('getEvents', events)
 
     setTimeout(getICS.bind(null, SOCKET), pull_rate)
