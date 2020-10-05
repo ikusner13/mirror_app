@@ -58,9 +58,9 @@ const googlePhotos = (socket) => {
             console.log('couldnt refresh token')
           })
       } else {
-        console.log('didnt expire callback')
-        console.log('token expire', oAuth2Client.credentials.expiry_date)
-        console.log('now', Date.now())
+        // console.log('didnt expire callback')
+        // console.log('token expire', oAuth2Client.credentials.expiry_date)
+        // console.log('now', Date.now())
         callback(oAuth2Client)
       }
     })

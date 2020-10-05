@@ -6,10 +6,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }*/
+
 html {
   cursor: none;
   overflow: hidden;
-  background: #000000!important;
+  background: #000000 !important;
 }
 
 ::-webkit-scrollbar {
@@ -17,23 +18,27 @@ html {
 }
 
 body {
-  margin: 60px!important;
-  position: absolute!important;
-  height: calc(100% - 120px)!important;
-  width: calc(100% - 100px)!important;
-  background: #000!important;
-  color: #aaa!important;
-  font-family: "Roboto Condensed", sans-serif!important;
-  font-weight: 400!important;
-  font-size: 2em!important;
-  line-height: 1.5em!important;
-  -webkit-font-smoothing: antialiased!important;
-  
+  margin: 60px !important;
+  position: absolute !important;
+  height: calc(100% - 120px) !important;
+  width: calc(100% - 100px) !important;
+  background: #000 !important;
+  color: #aaa !important;
+  font-family: /*'Roboto Condensed'*/ 'Creepster', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 2em !important;
+  line-height: 1.5em !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+#myVideo {
+  margin-top: -300px;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 /*.Clock{
@@ -42,4 +47,3 @@ code {
   background-color: red;
   margin-bottom: 25px;
 }*/
-

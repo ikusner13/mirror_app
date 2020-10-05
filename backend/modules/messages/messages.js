@@ -4,25 +4,35 @@ const helper = require('./helper')
 const { defaults } = require('../../../config/config').modules.find((obj) => {
   return obj.module === 'message'
 }).config
-const getRandomMessage = (messages) => {
-  let randomMessage = Math.floor(Math.random() * messages.length)
-  console.log(messages.length)
 
-  return messages[randomMessage]
+messages['lastMorningIndex'] = -1
+messages['lastAfternoonIndex'] = -1
+messages['lastEveningIndex'] = -1
+
+const getRandomMessage = (set, key) => {
+  // console.log('timeIndex', messages[key])
+  let randomMessage = Math.floor(Math.random() * set.length)
+
+  while (randomMessage === messages[key]) {
+    randomMessage = Math.floor(Math.random() * set.length)
+  }
+  messages[key] = randomMessage
+
+  return set[randomMessage]
 }
 
 const currentSet = () => {
   const hour = moment().hour()
 
   if (hour >= defaults.morningStart && hour < defaults.morningEnd) {
-    return getRandomMessage(messages.morning)
+    return getRandomMessage(messages.morning, 'lastMorningIndex')
   } else if (
     hour >= defaults.nightStart ||
     (hour >= 0 && hour < defaults.morningStart)
   ) {
-    return getRandomMessage(messages.evening)
+    return getRandomMessage(messages.evening, 'lastEveningIndex')
   } else {
-    return getRandomMessage(messages.anyTime)
+    return getRandomMessage(messages.anyTime, 'lastAfternoonIndex')
   }
 }
 
@@ -36,6 +46,7 @@ const getHoliday = () => {
 }
 
 const getMessages = (socket) => {
+  // console.log('new message', moment().format())
   if (getHoliday() !== null) {
     const holiday = getHoliday()
     socket.emit('message', holiday)
@@ -50,6 +61,7 @@ const getMessages = (socket) => {
     defaults.morningEnd,
     defaults.nightStart,
   )
+  // console.log('time', new Date(new Date().getTime() + time).toLocaleString())
   setTimeout(getMessages.bind(null, socket), time)
 }
 
