@@ -26,7 +26,7 @@ const getICS = async (SOCKET) => {
 
       return { startLocal, endLocal, summary }
     })
-    // console.log('return', events)
+    console.log('return', events)
     SOCKET.emit('getEvents', events)
 
     setTimeout(getICS.bind(null, SOCKET), pull_rate)
@@ -39,7 +39,7 @@ const getUpcoming = (filter, obj) => {
       const rule = obj.rrule
       //get all upcoming recurring events within time frame
       const past = moment().startOf('day').toDate()
-      const future = moment().add(7, 'd').toDate()
+      const future = moment().add(9, 'd').toDate()
       rule.options.dtstart = past //fixes event from not showing up on current day
       let dates = rule.between(past, future, true)
 
@@ -88,8 +88,7 @@ const getUpcoming = (filter, obj) => {
 const timeDiff = (start, end) => {
   start = start.split(':')
   end = end.split(':')
-
-  let hour = end[0] - start[0] < 0 ? end[0] - start[0] + 24 : end[0] - start[0]
+  let hour = end[0] - start[0] <= 0 ? end[0] - start[0] + 24 : end[0] - start[0]
 
   let minute
   if (end[1] - start[1] < 0) {
@@ -123,48 +122,3 @@ const endTime = (event, firstEvent) => {
 module.exports = {
   getICS,
 }
-
-/*       if (
-        typeof dates[0] !== 'undefined' &&
-        new Date(dates[0]).getUTCHours() < 4
-      ) {
-        dates.forEach((date) => {
-          date = date.setUTCDate(date.getUTCDate() + 1)
-        })
-      } */
-
-/*       newObj = dates.map((e) => {
-        // console.log('e', e)
-        let start = moment(e).local().format('HH:mm')
-        let end = moment(obj.end).local().format('HH:mm')
-
-        const diff = timeDiff(start, end)
-
-        //if all day event, add 1 day to start date
-        //if other recurring event, add event duration to start time
-        let endDate = obj.start.dateOnly
-          ? moment.utc(e).add(1, 'd').format('YYYY-MM-DD')
-          : moment
-              .utc(e)
-              .add(diff[0], 'hour')
-              .add(diff[1], 'minute')
-              .format('YYYY-MM-DD')
-        const endTime = moment.utc(obj.end).format('HH:mm:ss')
-        const UTCstring = `${endDate}T${endTime}.000Z`
-        let endDateUTC = new Date(UTCstring)
-        const newEvent = {
-          start: e,
-          end: endDateUTC,
-          summary: obj.summary,
-        }
-
-        return newEvent
-      }) */
-
-/*     newObj.forEach((element) => {
-      // console.log('element', element)
-      const parsed = new Date(Date.parse(element.end))
-      if (parsed - Date.now() > 0) {
-        filter.push(element)
-      }
-    }) */
