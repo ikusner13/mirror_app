@@ -39,4 +39,11 @@ const isBirthday = (event) => {
   return summary.includes('birthday') || summary.includes('bday')
 }
 
-export { firstFive, getTime }
+const getDaysUntilChristmas = () => {
+  const startOfDayEvent = moment('12/25/2020', 'MM/DD/YYYY').startOf('day')
+  const startOfDayToday = moment().startOf('day')
+  const diffDays = startOfDayEvent.diff(startOfDayToday, 'days')
+  return `${diffDays} days`
+}
+
+export { firstFive, getTime, getDaysUntilChristmas }

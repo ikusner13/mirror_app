@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import socket from '../services/socket'
-import { firstFive } from '../services/calendarService'
+import { firstFive, getDaysUntilChristmas } from '../services/calendarService'
+import helper from '../services/helper'
 const Calendar = () => {
   const [events, setEvents] = useState([])
+  const [christmas, getChristmas] = useState(' ')
+
+  const daysUntilChristmas = async () => {
+    getChristmas(getDaysUntilChristmas())
+    setTimeout(daysUntilChristmas, helper.calculateTimeTil(0))
+  }
 
   useEffect(() => {
     socket.on('getEvents', (data) => {
       setEvents(firstFive(data))
     })
+    daysUntilChristmas()
   }, [])
   return (
     <div>
+      <div className="float-right">Days until Christmas: {christmas}</div>
       <ul className="eventList">
         {events.map((item, index) => {
           const day = item.day
