@@ -46,11 +46,11 @@ const googlePhotos = (socket) => {
               __dirname + token_path,
               JSON.stringify(tokens),
               (err) => {
-                if (err) return console.error('err')
+                if (err) return //console.error('err')
                 console.log('Token stored to', token_path)
               },
             )
-            console.log('callback')
+            //console.log('callback')
             callback(oAuth2Client)
           })
           .catch((err) => {
@@ -122,8 +122,8 @@ const googlePhotos = (socket) => {
         await delay(500)
         getAlbum(auth)
       } else {
-        console.log('data', data.error.message)
-        console.log('auth', auth.credentials)
+        // console.log('data', data.error.message)
+        // console.log('auth', auth.credentials)
         return console.log('no matching albums')
       }
     } catch (error) {

@@ -39,7 +39,6 @@ const setNowPlaying = async (SOCKET) => {
         }
       })
       .catch((error) => {
-        // console.error(error)
         if (error.message === 'Unauthorized') {
           refresh()
         } else {
@@ -83,7 +82,7 @@ const refresh = async () => {
     spotifyApi.setAccessToken(newToken.body['access_token'])
     tokenExpirationEpoch = moment().add(newToken.body.expires_in, 'second')
   } catch (err) {
-    console.log(err.message)
+    // console.log(err.message)
   }
 }
 
