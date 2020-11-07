@@ -17,7 +17,7 @@ const Spotify = () => {
     return (
       <div>
         <img
-          src="./png/boo.png"
+          src="./png/turkey.png"
           alt="spotify"
           width="100"
           height="100"
