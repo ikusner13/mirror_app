@@ -11,23 +11,19 @@ const Spotify = () => {
     })
   }, [])
 
-  if (!songInfo.noSong) {
-    return <SpotifyPlaying songInfo={songInfo} />
-  } else {
-    return (
-      <div>
-        <img
-          src="./png/turkey.png"
-          alt="spotify"
-          width="100"
-          height="100"
-          //width="150"
-          //height="50"
-          className="top-buffer"
-        ></img>
-      </div>
-    )
-  }
+  return !songInfo.noSong ? (
+    <SpotifyPlaying songInfo={songInfo} />
+  ) : (
+    <div>
+      <img
+        src="./png/snowman.png"
+        alt="spotify"
+        width="100"
+        height="100"
+        className="top-buffer"
+      ></img>
+    </div>
+  )
 }
 
 export default Spotify
