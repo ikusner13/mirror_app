@@ -17,16 +17,24 @@ const getICS = async (SOCKET) => {
 
     //get events that are upcoming in next 14 days
     //convert event times to local time
+    //console.log('dataArr', dataArr)
     events = dataArr.reduce(getUpcoming, []).map(({ start, end, summary }) => {
+      console.log('start', start)
+      console.log('end', end)
       let startLocal = start.toLocaleString().split(' ')
       let endLocal = end.toLocaleString().split(' ')
+      //if timezone offset is 5, then add hour
+      console.log('start', moment(start).add(1, 'hours'))
+
+      let d = new Date()
+      console.log(d.getTimezoneOffset())
 
       startLocal[0] = startLocal[0].slice(0, -1)
       endLocal[0] = endLocal[0].slice(0, -1)
 
       return { startLocal, endLocal, summary }
     })
-    // console.log('return', events)
+    //console.log('return', events)
     SOCKET.emit('getEvents', events)
 
     setTimeout(getICS.bind(null, SOCKET), pull_rate)
@@ -43,6 +51,8 @@ const getUpcoming = (filter, obj) => {
       rule.options.dtstart = past //fixes event from not showing up on current day
       let dates = rule.between(past, future, true)
 
+      console.log('dates', dates)
+
       //if event is planned between 8pm and 12am EST, then rule.between will
       //change event to UTC, but wont adjust date correctly
       //so add 1 to date to offset this
@@ -56,12 +66,15 @@ const getUpcoming = (filter, obj) => {
             return new Date(Date.parse(endDateUTC)) - Date.now() > 0
           })
           .forEach((e) => {
+            // console.log('e', e)
             const endDateUTC = endTime(e, obj)
             const newEvent = {
               start: e,
               end: endDateUTC,
               summary: obj.summary,
             }
+
+            console.log('new event', newEvent)
 
             filter.push(newEvent)
           })
