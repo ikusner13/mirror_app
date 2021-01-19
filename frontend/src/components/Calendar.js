@@ -4,10 +4,10 @@ import { firstFive, getDaysUntilChristmas } from '../services/calendarService'
 import helper from '../services/helper'
 const Calendar = () => {
   const [events, setEvents] = useState([])
-  const [christmas, getChristmas] = useState(' ')
+  //const [christmas, getChristmas] = useState(' ')
 
   const daysUntilChristmas = async () => {
-    getChristmas(getDaysUntilChristmas())
+    //getChristmas(getDaysUntilChristmas())
     setTimeout(daysUntilChristmas, helper.calculateTimeTil(0))
   }
 
@@ -15,11 +15,10 @@ const Calendar = () => {
     socket.on('getEvents', (data) => {
       setEvents(firstFive(data))
     })
-    daysUntilChristmas()
+    //daysUntilChristmas()
   }, [])
   return (
     <div>
-      <div className="float-right">Days until Christmas: {christmas}</div>
       <ul className="eventList">
         {events.map((item, index) => {
           const day = item.day
@@ -54,3 +53,5 @@ const Calendar = () => {
 }
 
 export default Calendar
+
+//<div className="float-right">Days until Christmas: {christmas}</div>
