@@ -16,10 +16,10 @@ const Spotify = () => {
   ) : (
     <div>
       <img
-        src="./png/snowman.png"
+        src="./png/teddy.png"
         alt="spotify"
-        width="100"
-        height="100"
+        width="150"
+        height="150"
         className="top-buffer"
       ></img>
     </div>

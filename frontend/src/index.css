@@ -24,7 +24,9 @@ body {
   width: calc(100% - 100px) !important;
   background: #000 !important;
   color: #aaa !important;
-  font-family: 'Mountains of Christmas', cursive !important; /*'Roboto Condensed', sans-serif !important;*/
+  /*font-family: 'Mountains of Christmas', cursive !important; */
+  font-family: 'Roboto Condensed', sans-serif !important;
+  /*font-family: 'League Script', cursive !important;*/
   font-weight: 400 !important;
   font-size: 2em !important;
   line-height: 1.5em !important;
@@ -41,9 +43,12 @@ code {
   min-height: 100%;
 }
 
-/*.Clock{
-  top: 100%;
-  text-align: left;
-  background-color: red;
-  margin-bottom: 25px;
-}*/
+#hearts {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  /*width: 1200px;
+  height: 500px;
+  margin-left: 50px;*/
+}
