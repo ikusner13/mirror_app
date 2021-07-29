@@ -13,6 +13,7 @@ const Calendar = () => {
 
   useEffect(() => {
     socket.on('getEvents', (data) => {
+      console.log('Log ~ file: Calendar.js ~ line 16 ~ socket.on ~ data', data)
       setEvents(firstFive(data))
     })
     //daysUntilChristmas()
