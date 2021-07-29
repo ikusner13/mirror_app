@@ -37,6 +37,10 @@ const CurrentWeather = () => {
   useEffect(() => {
     const fetchData = async () => {
       const fetch_res = await fetch(api_uri)
+      console.log(
+        'Log ~ file: CurrentWeather.js ~ line 40 ~ fetchData ~ fetch_res',
+        fetch_res,
+      )
       const json = await fetch_res.json()
 
       setTemp(json.main.temp)
