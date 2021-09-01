@@ -13,9 +13,9 @@ const GooglePhotos = () => {
   return (
     <div className="float-right">
       {photo ? (
-        <img src={photo} alt="paige" width="300" height="300"></img>
+        <img src={photo} alt="google" width="300" height="300"></img>
       ) : (
-        <img src="./png/pumpkin.png" alt="paige" width="300" height="300"></img>
+        <img src="./png/paige.png" alt="paige" width="300" height="300"></img>
       )}
     </div>
   )
