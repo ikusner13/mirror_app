@@ -1,19 +1,19 @@
 const fetch = require('node-fetch')
+const { pull_rate, api_key, ZIP } =
+  require('../../../config/config').modules.find((obj) => {
+    return obj.module === 'weather'
+  }).config
 
-const defaults = {
-  time: 10,
-  ZIP: '44240',
-  api_key: 'b8d8163c79b9574cc193215f73d445c9',
-}
-
-let api_uri = `https://api.openweathermap.org/data/2.5/weather?zip=${defaults.ZIP},us&units=imperial&appid=${defaults.api_key}`
+let api_uri = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},us&units=imperial&appid=${api_key}`
 
 const getWeather = async (socket) => {
   const fetch_res = await fetch(api_uri)
   const json = await fetch_res.json()
-  socket.emit('weather', json)
+  console.log('return', json)
+  //socket.emit('weather', json)
 
-  setTimeout(getWeather.bind(null, socket), defaults.time * 60000)
+  //setTimeout(getWeather.bind(null, socket), defaults.time * 60000)
 }
+getWeather(0)
 
 module.exports = { getWeather }
