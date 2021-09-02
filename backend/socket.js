@@ -4,8 +4,7 @@ const google = require('./modules/googlePhotos')
 const messages = require('./modules/messages')
 const weather = require('./modules/weather')
 module.exports = {
-  startSocket: function (server) {
-    const io = require('socket.io')(server)
+  startSocket: function (io) {
     //SOCKET SETUP
     let connections = 0
     io.on('connect', (socket) => {
