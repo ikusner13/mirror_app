@@ -11,6 +11,7 @@ import {
   Temp,
   Description,
 } from '../styled/Weather'
+import socket from '../services/socket'
 
 const defaults = {
   updateTime: 10,
@@ -42,7 +43,7 @@ const CurrentWeather = () => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    /*const fetchData = async () => {
       const fetch_res = await fetch(api_uri)
       console.log(
         'Log ~ file: CurrentWeather.js ~ line 40 ~ fetchData ~ fetch_res',
@@ -60,7 +61,17 @@ const CurrentWeather = () => {
       getDayorNightIcons()
       setTimeout(fetchData, updateTime)
     }
-    fetchData()
+    fetchData()*/
+    socket.on('weather', (data) => {
+      setTemp(data.main.temp)
+
+      setCondition(data.weather[0].description)
+
+      setIcon(data.weather[0].id.toString())
+      setHighLow({ high: data.main.temp_max, low: data.main.temp_min })
+      setSunSet(data.sys.sunset)
+      getDayorNightIcons()
+    })
   }, [])
   return (
     <Weather>

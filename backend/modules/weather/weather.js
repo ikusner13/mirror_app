@@ -10,10 +10,9 @@ const getWeather = async (socket) => {
   const fetch_res = await fetch(api_uri)
   const json = await fetch_res.json()
   console.log('return', json)
-  //socket.emit('weather', json)
+  socket.emit('weather', json)
 
-  //setTimeout(getWeather.bind(null, socket), defaults.time * 60000)
+  setTimeout(getWeather.bind(null, socket), pull_rate)
 }
-getWeather(0)
 
 module.exports = { getWeather }

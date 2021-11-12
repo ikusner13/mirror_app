@@ -12,7 +12,7 @@ const Calendar = () => {
     birthday: false,
   }
   const test = Array(5).fill(item)
-  const [events, setEvents] = useState(test)
+  const [events, setEvents] = useState([])
   //const [christmas, getChristmas] = useState(' ')
 
   const daysUntilChristmas = async () => {
@@ -31,8 +31,8 @@ const Calendar = () => {
     <MyCalendar>
       {events.map((item, index) => {
         const day = item.day
-        const time = item.startLocal[1].slice(0, -3)
-        const period = item.startLocal[2]
+        const time = item.start[1].slice(0, -3)
+        const period = item.start[2]
         const summary = item.summary
         const isAllDay = item.allDay
         const isBirthday = item.birthday

@@ -9,14 +9,16 @@ const { getAlbum } = require('./getPhoto')
 const { createToken } = require('./createToken')
 let CALL_TIME = 0
 
-const googlePhotos = async () => {
+const googlePhotos = async (SOCKET) => {
+  console.log('socket', SOCKET)
   const credentials = await getAuthDetails()
 
   const oAuth2Client = await setCredentials(credentials)
 
   //console.log(oAuth2Client)
   const url = await getAlbum(oAuth2Client)
-  console.log(url)
+  console.log('url', url)
+  SOCKET.emit('googlePhotos', url)
 }
 
 const getAuthDetails = async () => {
@@ -38,7 +40,6 @@ const setCredentials = async (creds) => {
   return oAuth2Client
 }
 
-googlePhotos()
 module.exports = {
   googlePhotos,
 }

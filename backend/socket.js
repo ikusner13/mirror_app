@@ -12,8 +12,7 @@ module.exports = {
       calendar.getICS(socket)
       google.googlePhotos(socket)
       messages.getMessages(socket)
-      //weather.getWeather(socket)
+      weather.getWeather(socket)
     })
   },
-  // sendUpdate: function (notification, data) {},
 }

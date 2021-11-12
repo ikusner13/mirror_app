@@ -34,12 +34,11 @@ const getICS = async (SOCKET) => {
   }
 
   console.log('events', events)
-  //SOCKET.emit('getEvents', events)
+  SOCKET.emit('getEvents', events)
 
-  //setTimeout(getICS.bind(null, SOCKET), pull_rate)
+  setTimeout(getICS.bind(null, SOCKET), pull_rate)
 }
 
-getICS(0)
 module.exports = {
   getICS,
 }
