@@ -11,8 +11,8 @@ const Message = () => {
     })
   }, [])
   return (
-    <div className="">
-      <span className="">{currentMessage}</span>
+    <div>
+      <span>{currentMessage}</span>
     </div>
   )
 }

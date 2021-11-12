@@ -3,7 +3,15 @@ import socket from '../services/socket'
 import { firstFive, getDaysUntilChristmas } from '../services/calendarService'
 import helper from '../services/helper'
 const Calendar = () => {
-  const [events, setEvents] = useState([])
+  const item = {
+    day: 'Sunday',
+    startLocal: ['aaaaa', 'aaaaa', 'PM'],
+    summary: 'Summary Summary Summary',
+    allDay: false,
+    birthday: false,
+  }
+  const test = Array(5).fill(item)
+  const [events, setEvents] = useState(test)
   //const [christmas, getChristmas] = useState(' ')
 
   const daysUntilChristmas = async () => {

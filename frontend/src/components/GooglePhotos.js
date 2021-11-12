@@ -11,7 +11,7 @@ const GooglePhotos = () => {
   }, [])
 
   return (
-    <div className="float-right">
+    <div>
       {photo ? (
         <img src={photo} alt="google" width="300" height="300"></img>
       ) : (

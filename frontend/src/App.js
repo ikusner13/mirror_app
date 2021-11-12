@@ -9,9 +9,39 @@ import Calendar from './components/Calendar'
 import GooglePhotos from './components/GooglePhotos'
 
 import { Row, Col, Container } from 'react-bootstrap'
+import {
+  Grid,
+  TopLeft,
+  TopRight,
+  Middle,
+  BottomLeft,
+  BottomRight,
+} from './styled/Grid'
 
 function App() {
   return (
+    <Grid>
+      <div style={{ gridArea: 'TL', justifySelf: 'start' }}>
+        <Clock />
+        <Calendar />
+      </div>
+      <div style={{ gridArea: 'TR', justifySelf: 'end' }}>
+        <Date />
+        <CurrentWeather />
+      </div>
+      <div style={{ gridArea: 'M' }}>
+        <Message />
+      </div>
+      <div style={{ gridArea: 'BL', alignSelf: 'end', maxWidth: '400px' }}>
+        <Spotify />
+      </div>
+      <div style={{ gridArea: 'BR', alignSelf: 'end' }}>
+        <GooglePhotos />
+      </div>
+    </Grid>
+  )
+  {
+    /*
     <div>
       <Container fluid={true}>
         <Row className="">
@@ -45,8 +75,8 @@ function App() {
           </Col>
         </Row>
       </Container>
-    </div>
-  )
+    </div> */
+  }
 }
 
 export default App

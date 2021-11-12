@@ -3,7 +3,14 @@ import SpotifyPlaying from './Spotify-playing'
 import socket from '../services/socket'
 
 const Spotify = () => {
-  const [songInfo, setSongInfo] = useState({ noSong: true })
+  const test = {
+    imgURL: './png/paige.png',
+    songTitle: 'Song Title Song Title Song Title Song Title Song Title ',
+    artist: 'Artist',
+    album: 'album',
+  }
+  //const [songInfo, setSongInfo] = useState({ noSong: true })
+  const [songInfo, setSongInfo] = useState(test)
 
   useEffect(() => {
     socket.on('getPlayBackState', (data) => {
@@ -20,7 +27,6 @@ const Spotify = () => {
         alt="spotify"
         width="150"
         height="150"
-        className="top-buffer"
       ></img>
     </div>
   )
