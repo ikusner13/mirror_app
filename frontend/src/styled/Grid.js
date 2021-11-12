@@ -8,6 +8,7 @@ const Grid = styled.div`
   align-content: space-between;
   grid-template-areas:
     'TL . . TR TR'
+    '. . . . .'
     'M M M M M'
     'BL . . . BR';
   padding: 1rem;
@@ -16,23 +17,22 @@ const Grid = styled.div`
 `
 
 const TopLeft = styled.div`
-  grid-area: 'TL';
+  grid-area: TL;
   justify-self: start;
 `
 const TopRight = styled.div`
-  grid-area: 'TR';
-  justify-items: end;
+  grid-area: TR;
+  justify-self: end;
 `
 const Middle = styled.div`
-  grid-area: 'M';
+  grid-area: M;
 `
 const BottomLeft = styled.div`
-  grid-area: 'BL';
-  align-self: flex-end;
-  max-width: 400px;
+  grid-area: BL;
+  align-self: end;
 `
 const BottomRight = styled.div`
-  grid-area: 'BR';
-  align-self: flex-end;
+  grid-area: BR;
+  align-self: end;
 `
 export { Grid, TopLeft, TopRight, Middle, BottomLeft, BottomRight }

@@ -21,23 +21,23 @@ import {
 function App() {
   return (
     <Grid>
-      <div style={{ gridArea: 'TL', justifySelf: 'start' }}>
+      <TopLeft>
         <Clock />
         <Calendar />
-      </div>
-      <div style={{ gridArea: 'TR', justifySelf: 'end' }}>
+      </TopLeft>
+      <TopRight>
         <Date />
         <CurrentWeather />
-      </div>
-      <div style={{ gridArea: 'M' }}>
+      </TopRight>
+      <Middle>
         <Message />
-      </div>
-      <div style={{ gridArea: 'BL', alignSelf: 'end', maxWidth: '400px' }}>
+      </Middle>
+      <BottomLeft>
         <Spotify />
-      </div>
-      <div style={{ gridArea: 'BR', alignSelf: 'end' }}>
+      </BottomLeft>
+      <BottomRight>
         <GooglePhotos />
-      </div>
+      </BottomRight>
     </Grid>
   )
   {

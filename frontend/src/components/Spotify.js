@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import SpotifyPlaying from './Spotify-playing'
+//import SpotifyPlaying from './Spotify-playing'
 import socket from '../services/socket'
+import { SpotifyPlaying, SongImg, SongInfo } from '../styled/Spotify'
 
 const Spotify = () => {
   const test = {
@@ -19,7 +20,21 @@ const Spotify = () => {
   }, [])
 
   return !songInfo.noSong ? (
-    <SpotifyPlaying songInfo={songInfo} />
+    <SpotifyPlaying>
+      <SongImg src={songInfo.imgURL} alt="album" />
+      <SongInfo>
+        <i className="fa fa-music" />
+        {songInfo.songTitle}
+      </SongInfo>
+      <SongInfo>
+        <i className="fa fa-user" />
+        {songInfo.artist}
+      </SongInfo>
+      <SongInfo>
+        <i className="fa fa-folder" />
+        {songInfo.album}
+      </SongInfo>
+    </SpotifyPlaying>
   ) : (
     <div>
       <img
