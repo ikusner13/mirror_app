@@ -14,7 +14,7 @@ const CurrentDate = () => {
     date()
   })
 
-  return <div>{currentDate}</div>
+  return <div className="date">{currentDate}</div>
 }
 
 export default CurrentDate

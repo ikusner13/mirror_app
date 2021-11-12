@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-//import SpotifyPlaying from './Spotify-playing'
 import socket from '../services/socket'
 import { SpotifyPlaying, SongImg, SongInfo } from '../styled/Spotify'
 

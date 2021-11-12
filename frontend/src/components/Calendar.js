@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import socket from '../services/socket'
 import { firstFive, getDaysUntilChristmas } from '../services/calendarService'
 import helper from '../services/helper'
+import { Event, Calendar as MyCalendar, EventTime } from '../styled/Calendar'
 const Calendar = () => {
   const item = {
     day: 'Sunday',
@@ -27,37 +28,35 @@ const Calendar = () => {
     //daysUntilChristmas()
   }, [])
   return (
-    <div>
-      <ul className="eventList">
-        {events.map((item, index) => {
-          const day = item.day
-          const time = item.startLocal[1].slice(0, -3)
-          const period = item.startLocal[2]
-          const summary = item.summary
-          const isAllDay = item.allDay
-          const isBirthday = item.birthday
-          return (
-            <li key={index} className="events">
-              <div>
-                {isBirthday ? (
-                  <i className="fa fa-birthday-cake" aria-hidden="true"></i>
-                ) : (
-                  <i className="fa fa-calendar-o" aria-hidden="true"></i>
-                )}
-                <>{summary}</>
-              </div>
-              <div className="dayTime">
-                {isAllDay ? (
-                  <span>{day}</span>
-                ) : (
-                  <span>{`${day} at ${time}${period}`}</span>
-                )}
-              </div>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
+    <MyCalendar>
+      {events.map((item, index) => {
+        const day = item.day
+        const time = item.startLocal[1].slice(0, -3)
+        const period = item.startLocal[2]
+        const summary = item.summary
+        const isAllDay = item.allDay
+        const isBirthday = item.birthday
+        return (
+          <Event key={index}>
+            <div>
+              {isBirthday ? (
+                <i className="fa fa-birthday-cake" aria-hidden="true"></i>
+              ) : (
+                <i className="fa fa-calendar-o" aria-hidden="true"></i>
+              )}
+              <>{summary}</>
+            </div>
+            <EventTime>
+              {isAllDay ? (
+                <span>{day}</span>
+              ) : (
+                <span>{`${day} at ${time}${period}`}</span>
+              )}
+            </EventTime>
+          </Event>
+        )
+      })}
+    </MyCalendar>
   )
 }
 

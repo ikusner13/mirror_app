@@ -12,7 +12,7 @@ const Message = () => {
   }, [])
   return (
     <div>
-      <span>{currentMessage}</span>
+      <span className="message">{currentMessage}</span>
     </div>
   )
 }
