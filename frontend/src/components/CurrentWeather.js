@@ -4,6 +4,13 @@ import 'weather-icons/css/weather-icons.css'
 import moment from 'moment'
 import weather_day_icons from '../jsons/weather-day-icons'
 import weather_night_icons from '../jsons/weather-nigh-icons'
+import {
+  Weather,
+  HighLow,
+  Condition,
+  Temp,
+  Description,
+} from '../styled/Weather'
 
 const defaults = {
   updateTime: 10,
@@ -56,27 +63,21 @@ const CurrentWeather = () => {
     fetchData()
   }, [])
   return (
-    <div className="">
-      <Container fluid={true}>
-        <Row className="weather-text">
-          <Col className="text-right weather-col">
-            <div className="high-low">
-              high {Math.round(highLow.high)}&deg; / low{' '}
-              {Math.round(highLow.low)}&deg;
-              <i className="wi wi-sunset" />
-              {moment.unix(sunSet).format('hh:mm')}
-            </div>
-            <div className="">
-              <i className={`wi ${iconType[icon]} tempDegree`} />
-              <span className="temp tempDegree">
-                {Math.round(Number(temp))}&deg;
-              </span>
-              <div className="condition">{condition}</div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <Weather>
+      <HighLow>
+        high {Math.round(highLow.high)}&deg; / low {Math.round(highLow.low)}
+        &deg;
+        <i className="wi wi-sunset" />
+        {moment.unix(sunSet).format('hh:mm')}
+      </HighLow>
+      <Condition>
+        <Temp>
+          <i className={`wi ${iconType[icon]}`} />
+          {Math.round(Number(temp))}&deg;
+        </Temp>
+        <Description>{condition}</Description>
+      </Condition>
+    </Weather>
   )
 }
 
