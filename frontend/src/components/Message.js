@@ -9,11 +9,7 @@ const Message = () => {
       setCurrentMessage(message)
     })
   }, [])
-  return (
-    <div>
-      <span className="message">{currentMessage}</span>
-    </div>
-  )
+  return <div className="message">{currentMessage}</div>
 }
 
 export default Message

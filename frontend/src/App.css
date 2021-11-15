@@ -11,11 +11,12 @@ i {
 
 .message {
   font-size: 125%;
+  text-align: center;
 }
 
 .time {
-  font-size: 1.1em;
+  font-size: 1em;
 }
 .date {
-  font-size: 1.1em;
+  font-size: 1em;
 }

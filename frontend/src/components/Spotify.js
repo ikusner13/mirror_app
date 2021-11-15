@@ -9,8 +9,8 @@ const Spotify = () => {
     artist: 'Artist',
     album: 'album',
   }
-  //const [songInfo, setSongInfo] = useState({ noSong: true })
-  const [songInfo, setSongInfo] = useState(test)
+  const [songInfo, setSongInfo] = useState({ noSong: true })
+  //const [songInfo, setSongInfo] = useState(test)
 
   useEffect(() => {
     socket.on('getPlayBackState', (data) => {
