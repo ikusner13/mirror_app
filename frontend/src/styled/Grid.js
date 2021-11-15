@@ -9,7 +9,7 @@ const Grid = styled.div`
   grid-template-areas:
     'TL . . TR TR'
     '. . . . .'
-    '. M M M .'
+    'M M M M M'
     'BL . . . BR';
   padding: 1rem;
   justify-items: center;
