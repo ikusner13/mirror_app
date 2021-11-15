@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import SpotifyPlaying from './Spotify-playing'
 import socket from '../services/socket'
+import { SpotifyPlaying, SongImg, SongInfo } from '../styled/Spotify'
 
 const Spotify = () => {
+  const test = {
+    imgURL: './png/paige.png',
+    songTitle: 'Song Title Song Title Song Title Song Title Song Title ',
+    artist: 'Artist',
+    album: 'album',
+  }
   const [songInfo, setSongInfo] = useState({ noSong: true })
 
   useEffect(() => {
@@ -12,7 +18,21 @@ const Spotify = () => {
   }, [])
 
   return !songInfo.noSong ? (
-    <SpotifyPlaying songInfo={songInfo} />
+    <SpotifyPlaying>
+      <SongImg src={songInfo.imgURL} alt="album" />
+      <SongInfo>
+        <i className="fa fa-music" />
+        {songInfo.songTitle}
+      </SongInfo>
+      <SongInfo>
+        <i className="fa fa-user" />
+        {songInfo.artist}
+      </SongInfo>
+      <SongInfo>
+        <i className="fa fa-folder" />
+        {songInfo.album}
+      </SongInfo>
+    </SpotifyPlaying>
   ) : (
     <div>
       <img
@@ -20,7 +40,6 @@ const Spotify = () => {
         alt="spotify"
         width="150"
         height="150"
-        className="top-buffer"
       ></img>
     </div>
   )

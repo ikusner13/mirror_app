@@ -4,10 +4,12 @@ const readLine = require('readline')
 const fs = require('fs')
 const { TOKEN_PATH, scopes } = require('./config')
 
-fs.readFile(__dirname + '/auth.json', (err, content) => {
-  if (err) return console.log('Error loading client file:', err)
-  authorize(JSON.parse(content))
-})
+const createToken = () => {
+  fs.readFile(__dirname + '/auth.json', (err, content) => {
+    if (err) return console.log('Error loading client file:', err)
+    authorize(JSON.parse(content))
+  })
+}
 const authorize = (creds) => {
   const { client_id, client_secret, redirect_uris } = creds.installed
   const oAuth2Client = new google.auth.OAuth2(
@@ -38,4 +40,10 @@ const authorize = (creds) => {
       })
     })
   })
+}
+
+//createToken()
+
+module.exports = {
+  createToken,
 }

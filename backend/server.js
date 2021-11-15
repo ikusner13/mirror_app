@@ -1,9 +1,16 @@
 const express = require('express')
 const app = express()
-const http = require('http').createServer(app)
-//const io = require('socket.io')(http)
+const http = require('http')
+const server = http.createServer(app)
+const { Server } = require('socket.io')
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+})
+
 const { port } = require('../config/config')
-const path = require('path')
 const sockets = require('./socket')
 
 //app.use(cors())
@@ -29,7 +36,9 @@ app.use(function (req, res, next) {
 //app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static('build'))
 
-sockets.startSocket(http)
-http.listen(port, () => {
+sockets.startSocket(io)
+server.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
+
+module.exports = { io }

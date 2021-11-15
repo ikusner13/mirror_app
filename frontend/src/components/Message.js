@@ -6,13 +6,12 @@ const Message = () => {
 
   useEffect(() => {
     socket.on('message', (message) => {
-      console.log(message)
       setCurrentMessage(message)
     })
   }, [])
   return (
-    <div className="">
-      <span className="">{currentMessage}</span>
+    <div>
+      <span className="message">{currentMessage}</span>
     </div>
   )
 }
