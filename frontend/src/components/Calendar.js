@@ -1,31 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import socket from '../services/socket'
-import { firstFive, getDaysUntilChristmas } from '../services/calendarService'
-import helper from '../services/helper'
 import { Event, Calendar as MyCalendar, EventTime } from '../styled/Calendar'
 const Calendar = () => {
-  const item = {
-    day: 'Sunday',
-    startLocal: ['aaaaa', 'aaaaa', 'PM'],
-    summary: 'Summary Summary Summary',
-    allDay: false,
-    birthday: false,
-  }
-  const test = Array(5).fill(item)
   const [events, setEvents] = useState([])
-  //const [christmas, getChristmas] = useState(' ')
-
-  const daysUntilChristmas = async () => {
-    //getChristmas(getDaysUntilChristmas())
-    setTimeout(daysUntilChristmas, helper.calculateTimeTil(0))
-  }
+  const [holidays, setHolidays] = useState([])
 
   useEffect(() => {
     socket.on('getEvents', (data) => {
-      console.log('Log ~ file: Calendar.js ~ line 16 ~ socket.on ~ data', data)
-      setEvents(firstFive(data))
+      setEvents(data.events)
+      setHolidays(data.holidays)
     })
-    //daysUntilChristmas()
   }, [])
   return (
     <MyCalendar>
@@ -56,10 +40,11 @@ const Calendar = () => {
           </Event>
         )
       })}
+      {holidays.map((holiday, index) => (
+        <Event key={index}>{holiday}</Event>
+      ))}
     </MyCalendar>
   )
 }
 
 export default Calendar
-
-//<div className="float-right">Days until Christmas: {christmas}</div>

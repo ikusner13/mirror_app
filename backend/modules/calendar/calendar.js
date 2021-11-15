@@ -1,10 +1,15 @@
 const ical = require('node-ical')
-const moment = require('moment')
 const { ical_url, pull_rate } = require('../../../config/config').modules.find(
   (obj) => {
     return obj.module === 'calendar'
   },
 ).config
+const {
+  firstFive,
+  isAllDay,
+  isBirthday,
+  getDaysUntilChristmas,
+} = require('./services')
 
 //calendar
 const getICS = async (SOCKET) => {
@@ -27,14 +32,35 @@ const getICS = async (SOCKET) => {
           const end = ev.end.toLocaleString().split(' ')
           end[0] = end[0].slice(0, -1)
           const summary = ev.summary
-          events.push({ start, end, summary })
+
+          events.push({
+            start,
+            end,
+            summary,
+            allDay: isAllDay(start, end),
+            birthday: isBirthday(summary),
+          })
         }
       }
     }
   }
 
-  console.log('events', events)
-  SOCKET.emit('getEvents', events)
+  events.sort((a, b) => {
+    const startA = new Date(a.start[0])
+    const startB = new Date(b.start[0])
+
+    if (startA > startB) return 1
+    if (startA < startB) return -1
+    return 0
+  })
+
+  const fiveEvents = firstFive(events)
+
+  const calendar = {
+    events: fiveEvents,
+    holidays: [getDaysUntilChristmas()],
+  }
+  SOCKET.emit('getEvents', calendar)
 
   setTimeout(getICS.bind(null, SOCKET), pull_rate)
 }

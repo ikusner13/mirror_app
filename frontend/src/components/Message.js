@@ -6,7 +6,6 @@ const Message = () => {
 
   useEffect(() => {
     socket.on('message', (message) => {
-      console.log(message)
       setCurrentMessage(message)
     })
   }, [])

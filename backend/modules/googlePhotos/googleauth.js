@@ -1,6 +1,5 @@
 const { google } = require('googleapis')
 const fs = require('fs').promises
-const moment = require('moment')
 const { calculateTimeTil } = require('./helpers')
 const { token_path } = require('../../../config/config').modules.find((obj) => {
   return obj.module === 'googlePhotos'
@@ -10,14 +9,12 @@ const { createToken } = require('./createToken')
 let CALL_TIME = 0
 
 const googlePhotos = async (SOCKET) => {
-  console.log('socket', SOCKET)
   const credentials = await getAuthDetails()
 
   const oAuth2Client = await setCredentials(credentials)
 
   //console.log(oAuth2Client)
   const url = await getAlbum(oAuth2Client)
-  console.log('url', url)
   SOCKET.emit('googlePhotos', url)
 }
 

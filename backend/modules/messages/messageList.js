@@ -1,13 +1,16 @@
-const moment = require('moment')
 const { messages } = require('../../../config/config').modules.find((obj) => {
   return obj.module === 'message'
 }).config
+const dayjs = require('dayjs')
+const weekday = require('dayjs/plugin/weekday')
+const objectSupport = require('dayjs/plugin/objectSupport')
+dayjs.extend(objectSupport)
+dayjs.extend(weekday)
+
 const thanksgiving = () => {
-  const year = moment().year()
+  const year = dayjs().year()
   const month = 10
-
-  const november = moment({ year: year, month: month })
-
+  const november = dayjs({ year: year, month: month })
   const firstThursday = november.weekday(4)
 
   let weeks = 3
@@ -15,7 +18,7 @@ const thanksgiving = () => {
     weeks++
   }
 
-  return firstThursday.add(weeks, 'weeks').format('MM-DD')
+  return firstThursday.add(weeks, 'week').format('MM-DD')
 }
 const holiday = {
   '01-01': 'Happy New Years!',

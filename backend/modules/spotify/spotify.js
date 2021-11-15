@@ -1,10 +1,11 @@
 const SpotifyWebApi = require('spotify-web-api-node')
-const moment = require('moment')
 const config = require('../../../config/config')
 const spotify = config.modules.find((obj) => {
   return obj.module === 'spotify'
 }).config
 let { CURRENT_PULL, MIN_PULL } = require('./config')
+const dayjs = require('dayjs')
+//const moment = require('moment')
 
 //SPOTIFY SETUP
 var client_id = spotify.client_id // Your client id
@@ -19,15 +20,16 @@ const spotifyApi = new SpotifyWebApi({
   redirectUri: redirect_uri,
 })
 
-let tokenExpirationEpoch = moment()
+let tokenExpirationEpoch = dayjs()
 
 spotifyApi.setAccessToken(access_token)
 spotifyApi.setRefreshToken(refresh_token)
 const setNowPlaying = async (SOCKET) => {
-  if (moment().isBefore(tokenExpirationEpoch)) {
+  if (dayjs().isBefore(tokenExpirationEpoch)) {
     spotifyApi
       .getMyCurrentPlaybackState({})
       .then((result) => {
+        console.log(result)
         CURRENT_PULL = MIN_PULL
         //if body return something (is playing)
         if (Object.keys(result.body).length > 0) {
@@ -80,9 +82,9 @@ const refresh = async () => {
   try {
     const newToken = await spotifyApi.refreshAccessToken()
     spotifyApi.setAccessToken(newToken.body['access_token'])
-    tokenExpirationEpoch = moment().add(newToken.body.expires_in, 'second')
+    tokenExpirationEpoch = dayjs().add(newToken.body.expires_in, 'second')
   } catch (err) {
-    // console.log(err.message)
+    //console.log(err.message)
   }
 }
 
