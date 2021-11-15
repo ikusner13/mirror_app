@@ -56,7 +56,7 @@ const CurrentWeather = () => {
   return (
     <Weather>
       <HighLow>
-        high {weather.highLow.high}&deg; / Low {weather.highLow.low}&deg;
+        high {weather.highLow.high}&deg; / low {weather.highLow.low}&deg;
         <i className="wi wi-sunset" />
         {dayjs.unix(weather.sunSet).format('hh:mm')}
       </HighLow>
@@ -67,7 +67,7 @@ const CurrentWeather = () => {
         </Temp>
         <Description>{weather.condition}</Description>
       </Condition>
-      <Feel>Feels Like {weather.feel}&deg;</Feel>
+      <Feel>feels like {weather.feel}&deg;</Feel>
     </Weather>
   )
 }

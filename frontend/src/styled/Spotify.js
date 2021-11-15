@@ -1,15 +1,16 @@
 import styled from 'styled-components'
 
 const SpotifyPlaying = styled.div`
-  font-size: 65%;
   line-height: 1.05;
   max-width: 400px;
 `
 const SongImg = styled.img`
-  width: 240px;
-  height: 240px;
+  width: 200px;
+  height: 200px;
 `
 const SongInfo = styled.div`
+  font-size: 0.85rem;
+  max-width: 30ch;
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;

@@ -10,7 +10,7 @@ const HighLow = styled.div`
   margin-bottom: 5px;
 `
 const Condition = styled.div`
-  font-size: 2rem;
+  margin-bottom: 5px;
 `
 const Temp = styled.span`
   margin-bottom: 5px;

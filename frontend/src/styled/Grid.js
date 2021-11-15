@@ -7,7 +7,7 @@ const Grid = styled.div`
   grid-template-columns: repeat(5, 1fr);
   align-content: space-between;
   grid-template-areas:
-    'TL . . TR TR'
+    'TL TL . TR TR'
     '. . . . .'
     'M M M M M'
     'BL . . . BR';

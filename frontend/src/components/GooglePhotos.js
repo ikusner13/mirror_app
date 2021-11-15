@@ -15,7 +15,7 @@ const GooglePhotos = () => {
       {photo ? (
         <img src={photo} alt="google" width="300" height="300"></img>
       ) : (
-        <img src="./png/paige.png" alt="paige" width="300" height="300"></img>
+        <img src="./png/paige.png" alt="paige" width="250" height="250"></img>
       )}
     </div>
   )

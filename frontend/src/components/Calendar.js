@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react'
 import socket from '../services/socket'
 import { Event, Calendar as MyCalendar, EventTime } from '../styled/Calendar'
 const Calendar = () => {
+  const item = {
+    start: ['aaaa', 'aaa', 'aaa'],
+    end: ['aaaa', 'aaa', 'aaa'],
+    summary: 'hello hello',
+    allDay: false,
+    birthday: false,
+  }
+  const test = Array(5).fill(item)
   const [events, setEvents] = useState([])
   const [holidays, setHolidays] = useState([])
-
   useEffect(() => {
     socket.on('getEvents', (data) => {
       setEvents(data.events)
