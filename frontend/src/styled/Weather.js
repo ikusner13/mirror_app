@@ -10,17 +10,12 @@ const HighLow = styled.div`
   margin-bottom: 5px;
 `
 const Condition = styled.div`
-  display: flex;
   font-size: 2rem;
-  justify-content: flex-end;
 `
-const Temp = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const Temp = styled.span`
   margin-bottom: 5px;
   margin-right: 3px;
 `
-const Description = styled.div``
+const Description = styled.span``
 const Feel = styled.div``
 export { Weather, HighLow, Condition, Temp, Description, Feel }

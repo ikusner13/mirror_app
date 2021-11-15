@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
 const SpotifyPlaying = styled.div`
+  font-size: 65%;
   line-height: 1.05;
-  max-width: 500px;
+  max-width: 400px;
 `
 const SongImg = styled.img`
   width: 240px;
