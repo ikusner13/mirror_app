@@ -29,7 +29,6 @@ const setNowPlaying = async (SOCKET) => {
     spotifyApi
       .getMyCurrentPlaybackState({})
       .then((result) => {
-        console.log(result)
         CURRENT_PULL = MIN_PULL
         //if body return something (is playing)
         if (Object.keys(result.body).length > 0) {
