@@ -7,9 +7,11 @@ const { pull_rate, api_key, ZIP } =
 let api_uri = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},us&units=imperial&appid=${api_key}`
 
 const getWeather = async (socket) => {
-  const fetch_res = await fetch(api_uri)
-  const json = await fetch_res.json()
-  socket.emit('weather', json)
+  try {
+    const fetch_res = await fetch(api_uri)
+    const json = await fetch_res.json()
+    socket.emit('weather', json)
+  } catch (error) {}
 
   setTimeout(getWeather.bind(null, socket), pull_rate)
 }
