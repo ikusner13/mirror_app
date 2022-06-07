@@ -1,0 +1,26 @@
+.nowPlaying {
+  line-height: 1.05;
+  max-width: 400px;
+}
+
+.albumCover {
+  width: 200px;
+  height: 200px;
+}
+
+.songInfo {
+  font-size: 0.85rem;
+  max-width: 30ch;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.songInfo:last-of-type {
+  margin-bottom: 0;
+}
+
+i {
+  margin-right: 5px;
+}

@@ -1,0 +1,19 @@
+.weatherContainer {
+  width: 100%;
+  font-size: 70%;
+  line-height: 1.05;
+  text-align: right;
+}
+
+.highLow {
+  margin-bottom: 5px;
+}
+
+.condition {
+  margin-bottom: 5px;
+}
+
+.temp {
+  margin-bottom: 5px;
+  margin-right: 3px;
+}

@@ -1,0 +1,5 @@
+.date {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 80%;
+}

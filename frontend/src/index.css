@@ -8,6 +8,12 @@ html {
   display: none;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   background: #000 !important;
   color: #aaa !important;
@@ -22,6 +28,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 #myVideo {
   margin-top: -300px;
   min-width: 100%;
@@ -31,9 +38,5 @@ code {
 #background-img {
   display: block;
   margin-left: auto;
-  /*margin-right: auto;*/
   width: 80%;
-  /*width: 1200px;
-  height: 500px;
-  margin-left: 50px;*/
 }

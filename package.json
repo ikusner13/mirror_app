@@ -4,10 +4,10 @@
         "start": "electron ."
     },
     "devDependencies": {
-        "concurrently": "^5.2.0"
+        "concurrently": "^5.2.0",
+        "electron": "^11.1.0"
     },
     "dependencies": {
-        "electron": "^9.1.0",
         "node-fetch": "^2.6.0"
     }
 }

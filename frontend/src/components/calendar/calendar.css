@@ -1,0 +1,11 @@
+.calendar {
+  line-height: 1.25;
+  font-size: 15px;
+  list-style: none;
+  padding-left: 0;
+}
+
+.eventTime {
+  color: #5e5e5e;
+  margin-left: 20px;
+}
