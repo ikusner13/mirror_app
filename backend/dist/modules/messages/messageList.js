@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { modules: { message: { messages }, }, } = require('../../../../config/config');
 const dayjs_1 = __importDefault(require("dayjs"));
 const weekday_1 = __importDefault(require("dayjs/plugin/weekday"));
 const objectSupport_1 = __importDefault(require("dayjs/plugin/objectSupport"));
+const config_1 = __importDefault(require("config"));
 dayjs_1.default.extend(objectSupport_1.default);
 dayjs_1.default.extend(weekday_1.default);
+const messages = config_1.default.get('modules.message.messages');
 const messagesList = Object.assign({}, messages);
 const thanksgiving = () => {
     const year = (0, dayjs_1.default)().year();

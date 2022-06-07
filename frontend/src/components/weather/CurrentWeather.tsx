@@ -8,11 +8,47 @@ import './weather.css';
 
 interface IWeather {
   condition: string;
-  temp: string;
+  temp: number;
   icon: string;
   highLow: { high: number; low: number };
   sunSet: number;
   feel: number;
+}
+
+interface IWeatherMapPayload {
+  coord: { lon: number; lat: number };
+  weather: [
+    {
+      id: number;
+      main: string;
+      description: string;
+      icon: string;
+    },
+  ];
+  base: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  visibility: number;
+  wind: { speed: number; deg: number; gust: number };
+  clouds: { all: number };
+  dt: number;
+  sys: {
+    type: number;
+    id: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+  };
+  timezone: number;
+  id: number;
+  name: string;
+  cod: number;
 }
 
 const defaults = {
@@ -23,7 +59,7 @@ const defaults = {
 const CurrentWeather = () => {
   const [weather, setWeather] = useState<IWeather>({
     condition: 'condition',
-    temp: '69',
+    temp: 69,
     icon: defaults.day['200'],
     highLow: { high: 0, low: 0 },
     sunSet: 0,
@@ -41,7 +77,7 @@ const CurrentWeather = () => {
   };
 
   useEffect(() => {
-    socket.on('weather', (data) => {
+    socket.on('weather', (data: IWeatherMapPayload) => {
       setWeather({
         temp: data.main.temp,
         condition: data.weather[0].description,

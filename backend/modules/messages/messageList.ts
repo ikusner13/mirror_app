@@ -1,11 +1,7 @@
-const {
-  modules: {
-    message: { messages },
-  },
-} = require('../../../../config/config');
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import objectSupport from 'dayjs/plugin/objectSupport';
+import config from 'config';
 
 dayjs.extend(objectSupport);
 dayjs.extend(weekday);
@@ -18,6 +14,8 @@ interface Messages {
   evening: string[];
   holidays: Holidays;
 }
+
+const messages: Messages = config.get('modules.message.messages');
 
 const messagesList: Messages = { ...messages };
 

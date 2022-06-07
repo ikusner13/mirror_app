@@ -1,7 +1,8 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import sockets from './socket';
+import Socket from './socket';
+import config from 'config';
 
 const app = express();
 const server = http.createServer(app);
@@ -12,7 +13,7 @@ const io = new Server(server, {
   },
 });
 
-const { port } = require('../../config/config');
+const port = config.get('port');
 
 app.use(function (req, res, next) {
   const origin = req.get('origin');
@@ -36,7 +37,7 @@ app.use(function (req, res, next) {
 //app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static('build'));
 
-sockets.startSocket(io);
+Socket.startSocket(io);
 server.listen(port, () => {
   console.log(`listening on port ${port}`);
 });

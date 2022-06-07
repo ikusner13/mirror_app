@@ -1,23 +1,20 @@
 import ical, { VEvent } from 'node-ical';
-import { RRule } from 'rrule';
 import Module from '../module';
-import {
-  firstFive,
-  isAllDay,
-  isBirthday,
-  getDaysUntilChristmas,
-} from './services';
+import { firstFive, isAllDay, isBirthday } from './services';
+import config from 'config';
 
-//! FIX CONFIG
-const ical_url = '';
-const pull_rate = 0;
+const icalURL: string = config.get('modules.calendar.config.icalURL');
+const pullRate: number = config.get('modules.calendar.config.pullRate');
 
-//calendar
 class Calendar extends Module {
-  getICS = async () => {
+  public start(): void {
+    this.getICS();
+  }
+
+  private getICS = async () => {
     let events = [];
     const webEvents = await ical.async
-      .fromURL(ical_url)
+      .fromURL(icalURL)
       .catch((err) => console.log(err));
 
     if (!webEvents) {
@@ -69,11 +66,12 @@ class Calendar extends Module {
 
     const calendar = {
       events: fiveEvents,
-      holidays: [],
+      holidays: [], //add functions when holidays
     };
-    // SOCKET.emit('getEvents', calendar);
 
-    // setTimeout(this.getICS.bind(null, SOCKET), pull_rate);
+    this.sendSocketEvent('calendar', calendar);
+
+    setTimeout(this.getICS, pullRate);
   };
 }
 

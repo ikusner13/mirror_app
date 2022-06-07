@@ -30,7 +30,7 @@ const Calendar = () => {
   const [holidays, setHolidays] = useState<string[]>([]);
 
   useEffect(() => {
-    socket.on('getEvents', (data: ISocketData) => {
+    socket.on('calendar', (data: ISocketData) => {
       setEvents(data.events);
       setHolidays(data.holidays);
     });

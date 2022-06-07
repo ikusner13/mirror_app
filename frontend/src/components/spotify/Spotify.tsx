@@ -7,7 +7,6 @@ interface ISpotify {
   songTitle: string;
   artist: string;
   album: string;
-  noSong: boolean;
 }
 
 const Spotify = () => {
@@ -16,18 +15,17 @@ const Spotify = () => {
     songTitle: 'Song Title Song Title Song Title Song Title Song Title ',
     artist: 'Artist',
     album: 'album',
-    noSong: false,
   };
-  // const [songInfo, setSongInfo] = useState({ noSong: true })
-  const [songInfo, setSongInfo] = useState<ISpotify>(test);
+  const [songInfo, setSongInfo] = useState<ISpotify>(null);
+  // const [songInfo, setSongInfo] = useState<ISpotify>(test);
 
   useEffect(() => {
-    socket.on('getPlayBackState', (data: ISpotify) => {
+    socket.on('spotify', (data: ISpotify) => {
       setSongInfo(data);
     });
   }, []);
 
-  return !songInfo.noSong ? (
+  return songInfo ? (
     <div className="nowPlaying">
       <img className="albumCover" src={songInfo.imgURL} alt="album" />
       <div className="songInfo">

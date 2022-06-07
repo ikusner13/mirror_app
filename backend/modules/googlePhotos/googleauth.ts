@@ -3,34 +3,38 @@ import fs from 'fs/promises';
 import { calculateTimeTil } from './helpers';
 import { getAlbum } from './getPhoto';
 import Module from '../module';
-const moment = require('moment');
+import dayjs from 'dayjs';
+import config from 'config';
 
-//! FIX token_path IMPORT
-const token_path = '';
-
-let CALL_TIME = 0;
+const tokenPath: string = config.get('modules.googlePhotos.config.tokenPath');
 
 //! fix any types
 
 class GooglePhotos extends Module {
-  public googlePhotos = async (SOCKET: any) => {
+  public start(): void {
+    this.googlePhotos();
+  }
+
+  private googlePhotos = async () => {
     const credentials = await this.getAuthDetails();
 
     const oAuth2Client = await this.setCredentials(credentials);
 
     const url = await getAlbum(oAuth2Client);
-    SOCKET.emit('googlePhotos', url);
+    this.sendSocketEvent('googlePhotos', url);
 
-    let nextHour = moment().add(1, 'hour').hour();
-    CALL_TIME = calculateTimeTil(nextHour);
-    setTimeout(this.googlePhotos.bind(null, SOCKET), CALL_TIME);
+    const nextHour = dayjs().add(1, 'hour').hour();
+    const nextCallTime = calculateTimeTil(nextHour);
+
+    setTimeout(this.googlePhotos, nextCallTime);
   };
 
   private getAuthDetails = async () => {
     const data = await fs.readFile(__dirname + '/auth.json');
-    const content = JSON.parse(data as any);
+    const content = JSON.parse(data.toString());
     return content;
   };
+
   private setCredentials = async (creds: any) => {
     const { client_id, client_secret, redirect_uris } = creds.installed;
     const oAuth2Client = new google.auth.OAuth2(
@@ -38,8 +42,9 @@ class GooglePhotos extends Module {
       client_secret,
       redirect_uris[0],
     );
-    const tokens = await fs.readFile(__dirname + token_path);
-    oAuth2Client.setCredentials(JSON.parse(tokens as any));
+    const tokens = await fs.readFile(__dirname + tokenPath);
+    oAuth2Client.setCredentials(JSON.parse(tokens.toString()));
+
     return oAuth2Client;
   };
 }

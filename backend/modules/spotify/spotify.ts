@@ -1,24 +1,22 @@
 import SpotifyWebApi from 'spotify-web-api-node';
-// const config = require('../../../config/config')
-// const spotify = config.modules.find((obj) => {
-//   return obj.module === 'spotify'
-// }).config
 import dayjs from 'dayjs';
-import { Socket } from 'socket.io';
 import Module from '../module';
+import config from 'config';
 
-const spotify = {
-  client_id: '',
-  client_secret: '',
-  redirect_uri: '',
-  access_token: '',
-  refresh_token: '',
-};
+interface SpotifyConfig {
+  client_id: string;
+  client_secret: string;
+  redirect_uri: string;
+  access_token: string;
+  refresh_token: string;
+}
+
+const spotify: SpotifyConfig = config.get('modules.spotify.config');
 
 //SPOTIFY SETUP
-var client_id = spotify.client_id; // Your client id
-var client_secret = spotify.client_secret; // Your secret
-var redirect_uri = spotify.redirect_uri;
+const client_id = spotify.client_id; // Your client id
+const client_secret = spotify.client_secret; // Your secret
+const redirect_uri = spotify.redirect_uri;
 const access_token = spotify.access_token;
 const refresh_token = spotify.refresh_token;
 
@@ -37,7 +35,10 @@ const MIN_PULL = 3000;
 let CURRENT_PULL = MIN_PULL;
 
 class Spotify extends Module {
-  setNowPlaying = async (SOCKET: any) => {
+  public start() {
+    this.setNowPlaying();
+  }
+  private setNowPlaying = async () => {
     if (dayjs().isBefore(tokenExpirationEpoch)) {
       spotifyApi
         .getMyCurrentPlaybackState({})
@@ -45,11 +46,11 @@ class Spotify extends Module {
           CURRENT_PULL = MIN_PULL;
           //if body return something (is playing)
           if (Object.keys(result.body).length > 0) {
-            SOCKET.emit('getPlayBackState', sendablePayload(result.body));
+            this.sendSocketEvent('spotify', sendablePayload(result.body));
           }
           // isn't playing or has been paused for too long
           else {
-            SOCKET.emit('getPlayBackState', { noSong: true });
+            this.sendSocketEvent('spotify', null);
           }
         })
         .catch((error) => {
@@ -62,7 +63,7 @@ class Spotify extends Module {
     } else {
       refresh();
     }
-    setTimeout(this.setNowPlaying.bind(null, SOCKET), CURRENT_PULL);
+    setTimeout(this.setNowPlaying, CURRENT_PULL);
   };
 }
 

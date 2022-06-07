@@ -1,15 +1,16 @@
 import { Socket as SocketClass, Server } from 'socket.io';
 import ModulesSocketListener from './modules/modulesSocketListener';
 
-const Socket = {
-  startSocket: function (io: Server) {
+class Socket {
+  startSocket(io: Server) {
     //SOCKET SETUP
     io.on('connect', (socket: SocketClass) => {
+      console.log('Socket Connected');
       const listener = new ModulesSocketListener(socket);
 
-      listener.startListening();
+      listener.startEvents();
     });
-  },
-};
+  }
+}
 
-export default Socket;
+export default new Socket();

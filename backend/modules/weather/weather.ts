@@ -1,26 +1,26 @@
-// const { pull_rate, api_key, ZIP } =
-//   require('../../../config/config').modules.find((obj) => {
-//     return obj.module === 'weather';
-//   }).config;
-
 import Module from '../module';
+import config from 'config';
+import fetch from 'node-fetch';
 
-const pull_rate = 0;
-const api_key = '';
-const ZIP = '';
+const pullRate: number = config.get('modules.weather.config.pullRate');
+const APIKey: string = config.get('modules.weather.config.APIKey');
+const ZIP: string = config.get('modules.weather.config.ZIP');
 
-let api_uri = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},us&units=imperial&appid=${api_key}`;
+const api_uri = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},us&units=imperial&appid=${APIKey}`;
 
 class Weather extends Module {
-  getWeather = async (socket: any) => {
+  public start() {
+    this.getWeather();
+  }
+  private getWeather = async () => {
     const fetch_res = await fetch(api_uri).catch((error) => console.log(error));
 
     if (fetch_res) {
       const json = await fetch_res.json();
-      socket.emit('weather', json);
+      this.sendSocketEvent('weather', json);
     }
 
-    setTimeout(this.getWeather.bind(null, socket), pull_rate);
+    setTimeout(this.getWeather, pullRate);
   };
 }
 

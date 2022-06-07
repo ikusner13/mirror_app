@@ -1,12 +1,8 @@
-const {
-  modules: {
-    message: { config },
-  },
-} = require('../../../../config/config');
 import messages from './messageList';
 import { closestRefresh } from './helper';
 import dayjs from 'dayjs';
 import Module from '../module';
+import config from 'config';
 
 type indexKey = 'lastMorningIndex' | 'lastAfternoonIndex' | 'lastEveningIndex';
 
@@ -23,7 +19,9 @@ interface LastIndexes {
   lastEveningIndex: number;
 }
 
-const defaults: Defaults = config;
+const defaults: Defaults = config.get('modules.message.config');
+
+console.log(defaults);
 
 class Message extends Module {
   private _lastMessageIndexes: LastIndexes = {
@@ -32,18 +30,17 @@ class Message extends Module {
     lastEveningIndex: -1,
   };
 
-  public getMessages = () => {
-    console.log('GET MESSAGES');
+  public start() {
+    this.getMessages();
+  }
+
+  private getMessages = () => {
     const holiday = this.getHoliday();
 
     if (holiday) {
       this.sendSocketEvent('message', holiday);
     } else {
       const set = this.currentSet();
-      // eslint-disable-next-line no-console
-      console.log(
-        `🦄 ${Date.now().toString()} set: ${JSON.stringify(set, null, 4)}`,
-      );
       this.sendSocketEvent('message', set);
     }
 
@@ -54,7 +51,7 @@ class Message extends Module {
       defaults.nightStart,
     );
 
-    setTimeout(this.getMessages, time);
+    setTimeout(this.getMessages, 1000);
   };
 
   private getRandomMessage = (set: string[], key: indexKey) => {

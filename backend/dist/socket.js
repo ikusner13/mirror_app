@@ -8,6 +8,7 @@ const Socket = {
     startSocket: function (io) {
         //SOCKET SETUP
         io.on('connect', (socket) => {
+            console.log('Socket Connected');
             const listener = new modulesSocketListener_1.default(socket);
             listener.startListening();
         });

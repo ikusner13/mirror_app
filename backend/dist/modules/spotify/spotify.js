@@ -13,23 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
-// const config = require('../../../config/config')
-// const spotify = config.modules.find((obj) => {
-//   return obj.module === 'spotify'
-// }).config
 const dayjs_1 = __importDefault(require("dayjs"));
 const module_1 = __importDefault(require("../module"));
-const spotify = {
-    client_id: '',
-    client_secret: '',
-    redirect_uri: '',
-    access_token: '',
-    refresh_token: '',
-};
+const config_1 = __importDefault(require("config"));
+const spotify = config_1.default.get('modules.spotify.config');
 //SPOTIFY SETUP
-var client_id = spotify.client_id; // Your client id
-var client_secret = spotify.client_secret; // Your secret
-var redirect_uri = spotify.redirect_uri;
+const client_id = spotify.client_id; // Your client id
+const client_secret = spotify.client_secret; // Your secret
+const redirect_uri = spotify.redirect_uri;
 const access_token = spotify.access_token;
 const refresh_token = spotify.refresh_token;
 const spotifyApi = new spotify_web_api_node_1.default({
@@ -45,7 +36,7 @@ let CURRENT_PULL = MIN_PULL;
 class Spotify extends module_1.default {
     constructor() {
         super(...arguments);
-        this.setNowPlaying = (SOCKET) => __awaiter(this, void 0, void 0, function* () {
+        this.setNowPlaying = () => __awaiter(this, void 0, void 0, function* () {
             if ((0, dayjs_1.default)().isBefore(tokenExpirationEpoch)) {
                 spotifyApi
                     .getMyCurrentPlaybackState({})
@@ -53,11 +44,11 @@ class Spotify extends module_1.default {
                     CURRENT_PULL = MIN_PULL;
                     //if body return something (is playing)
                     if (Object.keys(result.body).length > 0) {
-                        SOCKET.emit('getPlayBackState', sendablePayload(result.body));
+                        this.sendSocketEvent('spotify', sendablePayload(result.body));
                     }
                     // isn't playing or has been paused for too long
                     else {
-                        SOCKET.emit('getPlayBackState', { noSong: true });
+                        this.sendSocketEvent('spotify', null);
                     }
                 })
                     .catch((error) => {
@@ -72,7 +63,7 @@ class Spotify extends module_1.default {
             else {
                 refresh();
             }
-            setTimeout(this.setNowPlaying.bind(null, SOCKET), CURRENT_PULL);
+            setTimeout(this.setNowPlaying, CURRENT_PULL);
         });
     }
 }

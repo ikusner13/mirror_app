@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const socket_1 = __importDefault(require("./socket"));
+const config_1 = __importDefault(require("config"));
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
@@ -15,7 +16,7 @@ const io = new socket_io_1.Server(server, {
         methods: ['GET', 'POST'],
     },
 });
-const { port } = require('../../config/config');
+const port = config_1.default.get('port');
 app.use(function (req, res, next) {
     const origin = req.get('origin');
     res.header('Access-Control-Allow-Origin', origin);

@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { modules: { message: { config }, }, } = require('../../../../config/config');
 const messageList_1 = __importDefault(require("./messageList"));
 const helper_1 = require("./helper");
 const dayjs_1 = __importDefault(require("dayjs"));
 const module_1 = __importDefault(require("../module"));
-const defaults = config;
+const config_1 = __importDefault(require("config"));
+const defaults = config_1.default.get('modules.message.config');
+console.log(defaults);
 class Message extends module_1.default {
     constructor() {
         super(...arguments);
@@ -18,15 +19,12 @@ class Message extends module_1.default {
             lastEveningIndex: -1,
         };
         this.getMessages = () => {
-            console.log('GET MESSAGES');
             const holiday = this.getHoliday();
             if (holiday) {
                 this.sendSocketEvent('message', holiday);
             }
             else {
                 const set = this.currentSet();
-                // eslint-disable-next-line no-console
-                console.log(`🦄 ${Date.now().toString()} set: ${JSON.stringify(set, null, 4)}`);
                 this.sendSocketEvent('message', set);
             }
             let time = (0, helper_1.closestRefresh)(defaults.morningStart, defaults.afternoon2, defaults.morningEnd, defaults.nightStart);

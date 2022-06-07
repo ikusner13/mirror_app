@@ -2,7 +2,12 @@ import { google } from 'googleapis';
 import opn from 'open';
 import readLine from 'readline';
 import fs from 'fs';
-import { TOKEN_PATH, scopes } from './config';
+import config from 'config';
+
+const scopes: string[] | string = config.get(
+  'modules.googlePhotos.config.scopes',
+);
+const tokenPath: string = config.get('modules.googlePhotos.config.tokenPath');
 
 //! fix any types
 
@@ -36,9 +41,9 @@ const authorize = (creds: any) => {
     r1.close();
     oAuth2Client.getToken(code, (err, token) => {
       if (err) return console.error('Error retrieving access token', err);
-      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+      fs.writeFile(tokenPath, JSON.stringify(token), (err) => {
         if (err) return console.error('err');
-        console.log('Token stored to', TOKEN_PATH);
+        console.log('Token stored to', tokenPath);
       });
     });
   });
