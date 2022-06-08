@@ -20,7 +20,6 @@ abstract class Module {
   abstract start(): void;
 
   protected sendSocketEvent(type: SocketEventType, payload: any) {
-    console.log('type', type, 'payload', payload);
     this._socket.emit(type, payload);
   }
 }

@@ -25,6 +25,7 @@ const Calendar = () => {
     birthday: false,
     day: 'day',
   };
+  // eslint-disable-next-line
   const test = Array(5).fill(item);
   const [events, setEvents] = useState<ICalendarEvent[]>([]);
   const [holidays, setHolidays] = useState<string[]>([]);

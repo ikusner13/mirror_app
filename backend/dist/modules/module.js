@@ -5,7 +5,6 @@ class Module {
         this._socket = socketInstance;
     }
     sendSocketEvent(type, payload) {
-        console.log('type', type, 'payload', payload);
         this._socket.emit(type, payload);
     }
 }

@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const modulesSocketListener_1 = __importDefault(require("./modules/modulesSocketListener"));
-const Socket = {
-    startSocket: function (io) {
+class Socket {
+    startSocket(io) {
         //SOCKET SETUP
         io.on('connect', (socket) => {
             console.log('Socket Connected');
             const listener = new modulesSocketListener_1.default(socket);
-            listener.startListening();
+            listener.startEvents();
         });
-    },
-};
-exports.default = Socket;
+    }
+}
+exports.default = new Socket();

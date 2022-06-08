@@ -3,7 +3,7 @@ import Module from '../module';
 import { firstFive, isAllDay, isBirthday } from './services';
 import config from 'config';
 
-const icalURL: string = config.get('modules.calendar.config.icalURL');
+const icalURL: string = config.get('modules.calendar.config.icalUrl');
 const pullRate: number = config.get('modules.calendar.config.pullRate');
 
 class Calendar extends Module {

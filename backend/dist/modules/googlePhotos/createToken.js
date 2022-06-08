@@ -8,7 +8,9 @@ const googleapis_1 = require("googleapis");
 const open_1 = __importDefault(require("open"));
 const readline_1 = __importDefault(require("readline"));
 const fs_1 = __importDefault(require("fs"));
-const config_1 = require("./config");
+const config_1 = __importDefault(require("config"));
+const scopes = config_1.default.get('modules.googlePhotos.config.scopes');
+const tokenPath = config_1.default.get('modules.googlePhotos.config.tokenPath');
 //! fix any types
 const createToken = () => {
     fs_1.default.readFile(__dirname + '/auth.json', (err, content) => {
@@ -23,7 +25,7 @@ const authorize = (creds) => {
     const oAuth2Client = new googleapis_1.google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
-        scope: config_1.scopes,
+        scope: scopes,
     });
     (0, open_1.default)(authUrl).catch(() => {
         console.log('failed to open url');
@@ -38,10 +40,10 @@ const authorize = (creds) => {
         oAuth2Client.getToken(code, (err, token) => {
             if (err)
                 return console.error('Error retrieving access token', err);
-            fs_1.default.writeFile(config_1.TOKEN_PATH, JSON.stringify(token), (err) => {
+            fs_1.default.writeFile(tokenPath, JSON.stringify(token), (err) => {
                 if (err)
                     return console.error('err');
-                console.log('Token stored to', config_1.TOKEN_PATH);
+                console.log('Token stored to', tokenPath);
             });
         });
     });

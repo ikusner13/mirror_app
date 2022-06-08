@@ -21,8 +21,6 @@ interface LastIndexes {
 
 const defaults: Defaults = config.get('modules.message.config');
 
-console.log(defaults);
-
 class Message extends Module {
   private _lastMessageIndexes: LastIndexes = {
     lastMorningIndex: -1,

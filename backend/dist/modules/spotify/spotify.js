@@ -66,6 +66,9 @@ class Spotify extends module_1.default {
             setTimeout(this.setNowPlaying, CURRENT_PULL);
         });
     }
+    start() {
+        this.setNowPlaying();
+    }
 }
 //! fix any type for next 3
 const getImgUrl = (images) => {

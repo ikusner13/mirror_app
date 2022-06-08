@@ -9,7 +9,6 @@ const dayjs_1 = __importDefault(require("dayjs"));
 const module_1 = __importDefault(require("../module"));
 const config_1 = __importDefault(require("config"));
 const defaults = config_1.default.get('modules.message.config');
-console.log(defaults);
 class Message extends module_1.default {
     constructor() {
         super(...arguments);
@@ -58,6 +57,9 @@ class Message extends module_1.default {
             }
             return null;
         };
+    }
+    start() {
+        this.getMessages();
     }
 }
 exports.default = Message;

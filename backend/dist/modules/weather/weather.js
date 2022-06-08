@@ -31,5 +31,8 @@ class Weather extends module_1.default {
             setTimeout(this.getWeather, pullRate);
         });
     }
+    start() {
+        this.getWeather();
+    }
 }
 exports.default = Weather;

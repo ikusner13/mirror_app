@@ -17,35 +17,37 @@ const promises_1 = __importDefault(require("fs/promises"));
 const helpers_1 = require("./helpers");
 const getPhoto_1 = require("./getPhoto");
 const module_1 = __importDefault(require("../module"));
-const moment = require('moment');
-//! FIX token_path IMPORT
-const token_path = '';
-let CALL_TIME = 0;
+const dayjs_1 = __importDefault(require("dayjs"));
+const config_1 = __importDefault(require("config"));
+const tokenPath = config_1.default.get('modules.googlePhotos.config.tokenPath');
 //! fix any types
 class GooglePhotos extends module_1.default {
     constructor() {
         super(...arguments);
-        this.googlePhotos = (SOCKET) => __awaiter(this, void 0, void 0, function* () {
+        this.googlePhotos = () => __awaiter(this, void 0, void 0, function* () {
             const credentials = yield this.getAuthDetails();
             const oAuth2Client = yield this.setCredentials(credentials);
             const url = yield (0, getPhoto_1.getAlbum)(oAuth2Client);
-            SOCKET.emit('googlePhotos', url);
-            let nextHour = moment().add(1, 'hour').hour();
-            CALL_TIME = (0, helpers_1.calculateTimeTil)(nextHour);
-            setTimeout(this.googlePhotos.bind(null, SOCKET), CALL_TIME);
+            this.sendSocketEvent('googlePhotos', url);
+            const nextHour = (0, dayjs_1.default)().add(1, 'hour').hour();
+            const nextCallTime = (0, helpers_1.calculateTimeTil)(nextHour);
+            setTimeout(this.googlePhotos, nextCallTime);
         });
         this.getAuthDetails = () => __awaiter(this, void 0, void 0, function* () {
             const data = yield promises_1.default.readFile(__dirname + '/auth.json');
-            const content = JSON.parse(data);
+            const content = JSON.parse(data.toString());
             return content;
         });
         this.setCredentials = (creds) => __awaiter(this, void 0, void 0, function* () {
             const { client_id, client_secret, redirect_uris } = creds.installed;
             const oAuth2Client = new googleapis_1.google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-            const tokens = yield promises_1.default.readFile(__dirname + token_path);
-            oAuth2Client.setCredentials(JSON.parse(tokens));
+            const tokens = yield promises_1.default.readFile(__dirname + tokenPath);
+            oAuth2Client.setCredentials(JSON.parse(tokens.toString()));
             return oAuth2Client;
         });
+    }
+    start() {
+        this.googlePhotos();
     }
 }
 exports.default = GooglePhotos;

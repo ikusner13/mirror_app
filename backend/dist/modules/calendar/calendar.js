@@ -15,17 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_ical_1 = __importDefault(require("node-ical"));
 const module_1 = __importDefault(require("../module"));
 const services_1 = require("./services");
-//! FIX CONFIG
-const ical_url = '';
-const pull_rate = 0;
-//calendar
+const config_1 = __importDefault(require("config"));
+const icalURL = config_1.default.get('modules.calendar.config.icalUrl');
+const pullRate = config_1.default.get('modules.calendar.config.pullRate');
 class Calendar extends module_1.default {
     constructor() {
         super(...arguments);
         this.getICS = () => __awaiter(this, void 0, void 0, function* () {
             let events = [];
             const webEvents = yield node_ical_1.default.async
-                .fromURL(ical_url)
+                .fromURL(icalURL)
                 .catch((err) => console.log(err));
             if (!webEvents) {
                 return;
@@ -70,11 +69,14 @@ class Calendar extends module_1.default {
             const fiveEvents = (0, services_1.firstFive)(events);
             const calendar = {
                 events: fiveEvents,
-                holidays: [],
+                holidays: [], //add functions when holidays
             };
-            // SOCKET.emit('getEvents', calendar);
-            // setTimeout(this.getICS.bind(null, SOCKET), pull_rate);
+            this.sendSocketEvent('calendar', calendar);
+            setTimeout(this.getICS, pullRate);
         });
+    }
+    start() {
+        this.getICS();
     }
 }
 exports.default = Calendar;

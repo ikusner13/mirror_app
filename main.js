@@ -1,7 +1,7 @@
-const { app, BrowserWindow } = require('electron')
-const server = require('./backend/server')
-const path = require('path')
-const url = require('url')
+const { app, BrowserWindow } = require('electron');
+const server = require('./backend/dist/server');
+const path = require('path');
+const url = require('url');
 
 const createWindow = () => {
   let mainWindow = new BrowserWindow({
@@ -16,11 +16,11 @@ const createWindow = () => {
     backgroundColor: '#000000',
     fullscreen: true,
     autoHideMenuBar: true,
-  })
+  });
 
   mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+    mainWindow = null;
+  });
 
   //mainWindow.webContents.openDevTools()
   mainWindow.loadURL(
@@ -29,21 +29,21 @@ const createWindow = () => {
       protocol: 'file:',
       slashes: true,
     }),
-  )
-}
+  );
+};
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
-})
+});
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    createWindow();
   }
-})
+});
