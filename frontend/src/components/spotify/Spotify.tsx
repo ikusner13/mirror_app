@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import socket from '../../services/socket';
+import Marquee from './Marquee';
 import './spotify.css';
 
 interface ISpotify {
@@ -14,6 +15,7 @@ const Spotify = () => {
   const test: ISpotify = {
     imgURL: './png/paige.png',
     songTitle: 'Song Title Song Title Song Title Song Title Song Title ',
+    // songTitle: 'test test test',
     artist: 'Artist',
     album: 'album',
   };
@@ -32,20 +34,15 @@ const Spotify = () => {
       <img className="albumCover" src={songInfo.imgURL} alt="album" />
       <div className="songInfo">
         <i className="fa fa-music spotifyIcon" />
-        <span className="marquee">
-          <span>{songInfo.songTitle}</span>
-        </span>
-        <span className="marquee marquee2">
-          <span style={{ color: 'red' }}>{songInfo.songTitle}</span>
-        </span>
+        <Marquee text={songInfo.songTitle} />
       </div>
       <div className="songInfo">
         <i className="fa fa-user spotifyIcon" />
-        {songInfo.artist}
+        <Marquee text={songInfo.artist} />
       </div>
       <div className="songInfo">
         <i className="fa fa-folder spotifyIcon" />
-        {songInfo.album}
+        <Marquee text={songInfo.album} />
       </div>
     </div>
   ) : (

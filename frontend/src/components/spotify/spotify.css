@@ -10,11 +10,9 @@
 
 .songInfo {
   font-size: 0.85rem;
-  max-width: 30ch;
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .songInfo:last-of-type {
@@ -31,29 +29,26 @@
   white-space: nowrap;
   overflow: hidden;
   position: absolute;
+  max-width: 30ch;
 }
 
-.marquee span {
+.marquee span.move {
   display: inline-block;
-  /*padding-left: 100%;*/
-  animation: marquee 10s linear infinite;
-  /*animation-delay: 5s;*/
+  animation: marquee 20s linear infinite;
 }
 
-.marquee2 span {
+.marquee2 span.move {
   display: inline-block;
-  animation: marquee2 10s linear infinite;
-  /*animation-delay: 0s;*/
-  /*padding-left: 100%;*/
+  animation: marquee2 20s linear infinite;
 }
 
 @keyframes marquee2 {
   0%,
-  25% {
-    transform: translate(100%, 0);
+  10% {
+    transform: translate(110%, 0);
   }
 
-  50%,
+  90%,
   100% {
     transform: translate(0, 0);
   }
@@ -61,12 +56,12 @@
 
 @keyframes marquee {
   0%,
-  25% {
+  10% {
     transform: translate(0, 0);
   }
 
-  50%,
+  90%,
   100% {
-    transform: translate(-100%, 0);
+    transform: translate(-110%, 0);
   }
 }
