@@ -13,41 +13,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const googleapis_1 = require("googleapis");
-const promises_1 = __importDefault(require("fs/promises"));
 const helpers_1 = require("./helpers");
-// import { getAlbum } from './getPhoto';
 const module_1 = __importDefault(require("../module"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const config_1 = __importDefault(require("config"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const tokenPath = config_1.default.get('modules.googlePhotos.config.tokenPath');
-const albumTitle = 'Mirror';
+const albumTitle = config_1.default.get('modules.googlePhotos.config.albumTitle');
+const token = config_1.default.get('modules.googlePhotos.token');
+const auth = config_1.default.get('modules.googlePhotos.auth');
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-//! fix any types
 class GooglePhotos extends module_1.default {
     constructor() {
         super(...arguments);
         this._albumLength = 0;
         this._lastPhotos = [];
         this.googlePhotos = () => __awaiter(this, void 0, void 0, function* () {
-            const credentials = yield this.getAuthDetails();
-            const oAuth2Client = yield this.setCredentials(credentials);
-            const url = yield this.getAlbum(oAuth2Client);
+            const oAuth2Client = yield this.getAuthDetails();
+            const url = yield this.getPhotoUrl(oAuth2Client);
             this.sendSocketEvent('googlePhotos', url);
             const nextHour = (0, dayjs_1.default)().add(1, 'hour').hour();
             const nextCallTime = (0, helpers_1.calculateTimeTil)(nextHour);
             setTimeout(this.googlePhotos, nextCallTime);
         });
         this.getAuthDetails = () => __awaiter(this, void 0, void 0, function* () {
-            const data = yield promises_1.default.readFile(__dirname + '/auth.json');
-            const content = JSON.parse(data.toString());
-            return content;
-        });
-        this.setCredentials = (creds) => __awaiter(this, void 0, void 0, function* () {
-            const { client_id, client_secret, redirect_uris } = creds.installed;
+            const { client_id, client_secret, redirect_uris } = auth.installed;
             const oAuth2Client = new googleapis_1.google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-            const tokens = yield promises_1.default.readFile(__dirname + tokenPath);
-            oAuth2Client.setCredentials(JSON.parse(tokens.toString()));
+            oAuth2Client.setCredentials(Object.assign({}, token));
             return oAuth2Client;
         });
     }
@@ -55,29 +46,38 @@ class GooglePhotos extends module_1.default {
         console.log('starting googlePhotos');
         this.googlePhotos();
     }
+    getPhotoUrl(auth) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const albumId = yield this.getAlbum(auth);
+            if (albumId) {
+                return yield this.getPhotoFromAlbum(auth, albumId);
+            }
+            return '';
+        });
+    }
     getAlbum(auth) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const headers = yield auth.getRequestHeaders('https://photoslibrary.googleapis.com/v1/albums');
-                const album = yield (0, node_fetch_1.default)('https://photoslibrary.googleapis.com/v1/albums', {
+                const albumData = yield (0, node_fetch_1.default)('https://photoslibrary.googleapis.com/v1/albums', {
                     method: 'get',
                     headers: headers,
                 });
-                const data = yield album.json();
+                const data = yield albumData.json();
                 const albums = data.albums;
-                if (Array.isArray(albums)) {
-                    for (let album of albums) {
-                        if (album.title === albumTitle) {
-                            return this.getPhotosFromAlbum(auth, album.id);
-                        }
-                    }
+                const album = albums.find((album) => album.title === albumTitle);
+                // if found album
+                if (album) {
+                    return album.id;
                 }
+                // if album is not found, and there is next page to look at
+                // idk if this is doing anything since query param isnt being sent
                 if (data.nextPageToken) {
                     yield delay(500);
                     this.getAlbum(auth);
                 }
                 else {
-                    return console.log('no matching albums');
+                    throw new Error('could not find album');
                 }
             }
             catch (error) {
@@ -85,10 +85,38 @@ class GooglePhotos extends module_1.default {
             }
         });
     }
-    getPhotosFromAlbum(auth, albumId) {
+    getRandomPhoto(photoUrls) {
+        if (this._lastPhotos.length === 0) {
+            for (let i = 0; i < photoUrls.length; i++) {
+                this._lastPhotos.push(i);
+            }
+            this._albumLength = photoUrls.length;
+        }
+        if (this._albumLength !== photoUrls.length) {
+            if (this._albumLength < photoUrls.length) {
+                for (let i = this._albumLength; i < photoUrls.length; i++) {
+                    this._lastPhotos.push(i);
+                }
+            }
+            else {
+                this._lastPhotos.length = 0;
+                for (let i = 0; i < photoUrls.length; i++) {
+                    this._lastPhotos.push(i);
+                }
+            }
+            this._albumLength = photoUrls.length;
+        }
+        const returnPhoto = (0, helpers_1.randPhoto)(photoUrls, this._lastPhotos);
+        const PhotoUrlsIndex = photoUrls.indexOf(returnPhoto);
+        const lastPhotosIndex = this._lastPhotos.indexOf(PhotoUrlsIndex);
+        if (lastPhotosIndex > -1) {
+            this._lastPhotos.splice(lastPhotosIndex, 1);
+        }
+        return returnPhoto;
+    }
+    getPhotoFromAlbum(auth, albumId) {
         return __awaiter(this, void 0, void 0, function* () {
             let photoUrls = [];
-            let returnUrl = '';
             const fetchPhotos = (pageToken = '') => __awaiter(this, void 0, void 0, function* () {
                 let body = {
                     pageSize: '100',
@@ -106,47 +134,19 @@ class GooglePhotos extends module_1.default {
                 });
                 const photos = yield res.json();
                 if (photos.mediaItems) {
-                    //! fix
                     photos.mediaItems.forEach((element) => {
                         photoUrls.push(element.baseUrl);
                     });
                 }
-                console.log('photoUrls', photoUrls);
                 if (photos.nextPageToken) {
                     yield delay(500);
                     fetchPhotos(photos.nextPageToken);
                 }
                 else {
-                    if (this._lastPhotos.length === 0) {
-                        for (let i = 0; i < photoUrls.length; i++) {
-                            this._lastPhotos.push(i);
-                        }
-                        this._albumLength = photoUrls.length;
-                    }
-                    if (this._albumLength !== photoUrls.length) {
-                        if (this._albumLength < photoUrls.length) {
-                            for (let i = this._albumLength; i < photoUrls.length; i++) {
-                                this._lastPhotos.push(i);
-                            }
-                        }
-                        else {
-                            this._lastPhotos.length = 0;
-                            for (let i = 0; i < photoUrls.length; i++) {
-                                this._lastPhotos.push(i);
-                            }
-                        }
-                        this._albumLength = photoUrls.length;
-                    }
-                    returnUrl = (0, helpers_1.randPhoto)(photoUrls, this._lastPhotos);
-                    const PhotoUrlsIndex = photoUrls.indexOf(returnUrl);
-                    const lastPhotosIndex = this._lastPhotos.indexOf(PhotoUrlsIndex);
-                    if (lastPhotosIndex > -1) {
-                        this._lastPhotos.splice(lastPhotosIndex, 1);
-                    }
-                    return returnUrl;
+                    return this.getRandomPhoto(photoUrls);
                 }
             });
-            return yield fetchPhotos();
+            return (yield fetchPhotos());
         });
     }
 }

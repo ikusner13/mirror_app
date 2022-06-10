@@ -1,20 +1,59 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import fs from 'fs/promises';
 import { calculateTimeTil, randPhoto } from './helpers';
-// import { getAlbum } from './getPhoto';
 import Module from '../module';
 import dayjs from 'dayjs';
 import config from 'config';
 import fetch from 'node-fetch';
 
-const tokenPath: string = config.get('modules.googlePhotos.config.tokenPath');
+interface Album {
+  id: string;
+  title: string;
+  productUrl: string;
+  isWriteable: boolean;
+  shareInfo: {};
+  mediaItemsCount: string;
+  coverPhotoBaseUrl: string;
+  coverPhotoMediaItemId: string;
+}
 
-const albumTitle = 'Mirror';
+interface Photo {
+  mediaItems: {
+    id: string;
+    description: string;
+    productUrl: string;
+    baseUrl: string;
+    mimeType: string;
+    mediaMetadata: {};
+    contributorInfo: {};
+    filename: string;
+  }[];
+  nextPageToken: string;
+}
+
+interface Auth {
+  installed: {
+    client_id: string;
+    project_id: string;
+    auth_url: string;
+    token_uri: string;
+    auth_provider_x509_cert_url: string;
+    client_secret: string;
+    redirect_uris: string[];
+  };
+}
+
+interface Token {
+  access_token: string;
+  scope: string;
+  token_type: string;
+}
+
+const albumTitle: string = config.get('modules.googlePhotos.config.albumTitle');
+const token: Token = config.get('modules.googlePhotos.token');
+const auth: Auth = config.get('modules.googlePhotos.auth');
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
-//! fix any types
 
 class GooglePhotos extends Module {
   private _albumLength: number = 0;
@@ -26,11 +65,9 @@ class GooglePhotos extends Module {
   }
 
   private googlePhotos = async () => {
-    const credentials = await this.getAuthDetails();
+    const oAuth2Client = await this.getAuthDetails();
 
-    const oAuth2Client = await this.setCredentials(credentials);
-
-    const url = await this.getAlbum(oAuth2Client);
+    const url = await this.getPhotoUrl(oAuth2Client);
 
     this.sendSocketEvent('googlePhotos', url);
 
@@ -41,59 +78,100 @@ class GooglePhotos extends Module {
   };
 
   private getAuthDetails = async () => {
-    const data = await fs.readFile(__dirname + '/auth.json');
-    const content = JSON.parse(data.toString());
-    return content;
-  };
+    const { client_id, client_secret, redirect_uris } = auth.installed;
 
-  private setCredentials = async (creds: any) => {
-    const { client_id, client_secret, redirect_uris } = creds.installed;
     const oAuth2Client = new google.auth.OAuth2(
       client_id,
       client_secret,
       redirect_uris[0],
     );
-    const tokens = await fs.readFile(__dirname + tokenPath);
-    oAuth2Client.setCredentials(JSON.parse(tokens.toString()));
+
+    oAuth2Client.setCredentials({ ...token });
 
     return oAuth2Client;
   };
+
+  private async getPhotoUrl(auth: OAuth2Client) {
+    const albumId = await this.getAlbum(auth);
+
+    if (albumId) {
+      return await this.getPhotoFromAlbum(auth, albumId);
+    }
+
+    return '';
+  }
 
   private async getAlbum(auth: OAuth2Client) {
     try {
       const headers = await auth.getRequestHeaders(
         'https://photoslibrary.googleapis.com/v1/albums',
       );
-      const album = await fetch(
+      const albumData = await fetch(
         'https://photoslibrary.googleapis.com/v1/albums',
         {
           method: 'get',
           headers: headers,
         },
       );
-      const data = await album.json();
-      const albums = data.albums;
-      if (Array.isArray(albums)) {
-        for (let album of albums) {
-          if (album.title === albumTitle) {
-            return this.getPhotosFromAlbum(auth, album.id);
-          }
-        }
+
+      const data = await albumData.json();
+      const albums: Album[] = data.albums;
+
+      const album = albums.find((album) => album.title === albumTitle);
+
+      // if found album
+      if (album) {
+        return album.id;
       }
+
+      // if album is not found, and there is next page to look at
+      // idk if this is doing anything since query param isnt being sent
       if (data.nextPageToken) {
         await delay(500);
         this.getAlbum(auth);
       } else {
-        return console.log('no matching albums');
+        throw new Error('could not find album');
       }
     } catch (error) {
       console.log('error', error);
     }
   }
 
-  private async getPhotosFromAlbum(auth: OAuth2Client, albumId: string) {
+  private getRandomPhoto(photoUrls: string[]) {
+    if (this._lastPhotos.length === 0) {
+      for (let i = 0; i < photoUrls.length; i++) {
+        this._lastPhotos.push(i);
+      }
+      this._albumLength = photoUrls.length;
+    }
+
+    if (this._albumLength !== photoUrls.length) {
+      if (this._albumLength < photoUrls.length) {
+        for (let i = this._albumLength; i < photoUrls.length; i++) {
+          this._lastPhotos.push(i);
+        }
+      } else {
+        this._lastPhotos.length = 0;
+        for (let i = 0; i < photoUrls.length; i++) {
+          this._lastPhotos.push(i);
+        }
+      }
+      this._albumLength = photoUrls.length;
+    }
+
+    const returnPhoto = randPhoto(photoUrls, this._lastPhotos);
+
+    const PhotoUrlsIndex = photoUrls.indexOf(returnPhoto);
+    const lastPhotosIndex = this._lastPhotos.indexOf(PhotoUrlsIndex);
+    if (lastPhotosIndex > -1) {
+      this._lastPhotos.splice(lastPhotosIndex, 1);
+    }
+
+    return returnPhoto;
+  }
+
+  private async getPhotoFromAlbum(auth: OAuth2Client, albumId: string) {
     let photoUrls: string[] = [];
-    let returnUrl = '';
     const fetchPhotos = async (pageToken = '') => {
       let body = {
         pageSize: '100',
@@ -110,55 +188,22 @@ class GooglePhotos extends Module {
         body: JSON.stringify(body),
       });
 
-      const photos = await res.json();
+      const photos: Photo = await res.json();
 
       if (photos.mediaItems) {
-        //! fix
-        photos.mediaItems.forEach((element: any) => {
+        photos.mediaItems.forEach((element) => {
           photoUrls.push(element.baseUrl);
         });
       }
-
-      console.log('photoUrls', photoUrls);
 
       if (photos.nextPageToken) {
         await delay(500);
         fetchPhotos(photos.nextPageToken);
       } else {
-        if (this._lastPhotos.length === 0) {
-          for (let i = 0; i < photoUrls.length; i++) {
-            this._lastPhotos.push(i);
-          }
-          this._albumLength = photoUrls.length;
-        }
-
-        if (this._albumLength !== photoUrls.length) {
-          if (this._albumLength < photoUrls.length) {
-            for (let i = this._albumLength; i < photoUrls.length; i++) {
-              this._lastPhotos.push(i);
-            }
-          } else {
-            this._lastPhotos.length = 0;
-            for (let i = 0; i < photoUrls.length; i++) {
-              this._lastPhotos.push(i);
-            }
-          }
-          this._albumLength = photoUrls.length;
-        }
-
-        returnUrl = randPhoto(photoUrls, this._lastPhotos);
-
-        const PhotoUrlsIndex = photoUrls.indexOf(returnUrl);
-
-        const lastPhotosIndex = this._lastPhotos.indexOf(PhotoUrlsIndex);
-        if (lastPhotosIndex > -1) {
-          this._lastPhotos.splice(lastPhotosIndex, 1);
-        }
-
-        return returnUrl;
+        return this.getRandomPhoto(photoUrls);
       }
     };
-    return await fetchPhotos();
+    return (await fetchPhotos()) as string;
   }
 }
 
