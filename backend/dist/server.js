@@ -8,16 +8,17 @@ const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const socket_1 = __importDefault(require("./socket"));
 const config_1 = __importDefault(require("config"));
+const port = config_1.default.get('port');
+const origin = config_1.default.get('origin');
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: `http://localhost:${origin}`,
         methods: ['GET', 'POST'],
         credentials: true,
     },
 });
-const port = config_1.default.get('port');
 app.use(express_1.default.static('build'));
 socket_1.default.startSocket(io);
 server.listen(port, () => {

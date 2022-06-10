@@ -1,5 +1,6 @@
 {
   "port": 5001,
+  "origin": 3000,
   "modules": {
     "message": {
       "config": {
