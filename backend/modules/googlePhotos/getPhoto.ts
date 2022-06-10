@@ -1,7 +1,8 @@
 import { OAuth2Client } from 'google-auth-library';
 import { randPhoto } from './helpers';
+import fetch from 'node-fetch';
 
-const albumTitle = '';
+const albumTitle = 'Mirror';
 let lastPhotos: number[] = [];
 let albumLength = 0;
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -16,16 +17,9 @@ const getAlbum = async (auth: OAuth2Client) => {
       {
         method: 'get',
         headers: headers,
-        /*{
-          
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + auth.credentials.access_token,
-          'auth': auth,
-          
-        },*/
       },
     );
-    let data = await album.json();
+    const data = await album.json();
     const albums = data.albums;
     if (Array.isArray(albums)) {
       for (let album of albums) {
@@ -54,8 +48,6 @@ const getPhotosFromAlbum = async (auth: OAuth2Client, albumId: string) => {
       pageToken,
       albumId,
     };
-    //const params = new URLSearchParams(body)
-
     const url = 'https://photoslibrary.googleapis.com/v1/mediaItems:search';
     const res = await fetch(url, {
       method: 'POST',
@@ -75,6 +67,8 @@ const getPhotosFromAlbum = async (auth: OAuth2Client, albumId: string) => {
       });
     }
 
+    console.log('photoUrls', photoUrls);
+
     if (photos.nextPageToken) {
       await delay(500);
       fetchPhotos(photos.nextPageToken);
@@ -85,6 +79,7 @@ const getPhotosFromAlbum = async (auth: OAuth2Client, albumId: string) => {
         }
         albumLength = photoUrls.length;
       }
+
       if (albumLength !== photoUrls.length) {
         if (albumLength < photoUrls.length) {
           for (let i = albumLength; i < photoUrls.length; i++) {
@@ -98,17 +93,17 @@ const getPhotosFromAlbum = async (auth: OAuth2Client, albumId: string) => {
         }
         albumLength = photoUrls.length;
       }
-      //const url = randPhoto(photoUrls, lastPhotos)
+
       returnUrl = randPhoto(photoUrls, lastPhotos);
-      const PhotoUrlsIndex = photoUrls.indexOf(url);
+
+      const PhotoUrlsIndex = photoUrls.indexOf(returnUrl);
 
       const lastPhotosIndex = lastPhotos.indexOf(PhotoUrlsIndex);
       if (lastPhotosIndex > -1) {
         lastPhotos.splice(lastPhotosIndex, 1);
       }
-      //console.log('old url', returnUrl)
+
       return returnUrl;
-      //socket.emit('googlePhotos', url)
     }
   };
   return await fetchPhotos();

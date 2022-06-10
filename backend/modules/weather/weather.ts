@@ -10,6 +10,7 @@ const api_uri = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},us&u
 
 class Weather extends Module {
   public start() {
+    console.log('starting weather');
     this.getWeather();
   }
   private getWeather = async () => {

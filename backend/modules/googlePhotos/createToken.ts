@@ -49,6 +49,6 @@ const authorize = (creds: any) => {
   });
 };
 
-//createToken()
+createToken();
 
 export { createToken };

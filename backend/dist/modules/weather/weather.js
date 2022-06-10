@@ -32,6 +32,7 @@ class Weather extends module_1.default {
         });
     }
     start() {
+        console.log('starting weather');
         this.getWeather();
     }
 }

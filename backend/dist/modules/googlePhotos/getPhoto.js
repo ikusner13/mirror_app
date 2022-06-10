@@ -8,28 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAlbum = void 0;
 const helpers_1 = require("./helpers");
-const albumTitle = '';
+const node_fetch_1 = __importDefault(require("node-fetch"));
+const albumTitle = 'Mirror';
 let lastPhotos = [];
 let albumLength = 0;
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 const getAlbum = (auth) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const headers = yield auth.getRequestHeaders('https://photoslibrary.googleapis.com/v1/albums');
-        const album = yield fetch('https://photoslibrary.googleapis.com/v1/albums', {
+        const album = yield (0, node_fetch_1.default)('https://photoslibrary.googleapis.com/v1/albums', {
             method: 'get',
             headers: headers,
-            /*{
-              
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + auth.credentials.access_token,
-              'auth': auth,
-              
-            },*/
         });
-        let data = yield album.json();
+        const data = yield album.json();
         const albums = data.albums;
         if (Array.isArray(albums)) {
             for (let album of albums) {
@@ -60,9 +57,8 @@ const getPhotosFromAlbum = (auth, albumId) => __awaiter(void 0, void 0, void 0, 
             pageToken,
             albumId,
         };
-        //const params = new URLSearchParams(body)
         const url = 'https://photoslibrary.googleapis.com/v1/mediaItems:search';
-        const res = yield fetch(url, {
+        const res = yield (0, node_fetch_1.default)(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -77,6 +73,7 @@ const getPhotosFromAlbum = (auth, albumId) => __awaiter(void 0, void 0, void 0, 
                 photoUrls.push(element.baseUrl);
             });
         }
+        console.log('photoUrls', photoUrls);
         if (photos.nextPageToken) {
             yield delay(500);
             fetchPhotos(photos.nextPageToken);
@@ -102,16 +99,13 @@ const getPhotosFromAlbum = (auth, albumId) => __awaiter(void 0, void 0, void 0, 
                 }
                 albumLength = photoUrls.length;
             }
-            //const url = randPhoto(photoUrls, lastPhotos)
             returnUrl = (0, helpers_1.randPhoto)(photoUrls, lastPhotos);
-            const PhotoUrlsIndex = photoUrls.indexOf(url);
+            const PhotoUrlsIndex = photoUrls.indexOf(returnUrl);
             const lastPhotosIndex = lastPhotos.indexOf(PhotoUrlsIndex);
             if (lastPhotosIndex > -1) {
                 lastPhotos.splice(lastPhotosIndex, 1);
             }
-            //console.log('old url', returnUrl)
             return returnUrl;
-            //socket.emit('googlePhotos', url)
         }
     });
     return yield fetchPhotos();

@@ -94,12 +94,12 @@ const CurrentWeather = () => {
     <div className="weatherContainer">
       <div className="highLow">
         high {weather.highLow.high}&deg; / low {weather.highLow.low}&deg;
-        <i className="wi wi-sunset" />
+        <i className="wi wi-sunset weatherIcon" />
         {dayjs.unix(weather.sunSet).format('hh:mm')}
       </div>
       <div className="condition">
         <span className="temp">
-          <i className={`wi ${weather.icon}`} />
+          <i className={`wi ${weather.icon} weatherIcon`} />
           {Math.round(Number(weather.temp))}&deg;
         </span>
         <span>{weather.condition}</span>

@@ -1,5 +1,5 @@
 html {
-  /* cursor: none; */
+  cursor: none;
   overflow: hidden;
   background: #000000 !important;
 }
@@ -22,11 +22,6 @@ body {
   font-size: 2em !important;
   line-height: 1.5em !important;
   -webkit-font-smoothing: antialiased !important;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 #myVideo {

@@ -19,11 +19,12 @@ const Clock = () => {
 
   useEffect(() => {
     const time = () => {
+      const day = dayjs();
       setTime({
-        second: dayjs().format('ss'),
-        minute: dayjs().format('mm'),
-        hour: dayjs().format('hh'),
-        period: dayjs().format('A'),
+        second: day.format('ss'),
+        minute: day.format('mm'),
+        hour: day.format('hh'),
+        period: day.format('A'),
       });
       setTimeout(time, 1000);
     };

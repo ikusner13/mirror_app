@@ -6,9 +6,8 @@ class Socket {
     //SOCKET SETUP
     io.on('connect', (socket: SocketClass) => {
       console.log('Socket Connected');
-      const listener = new ModulesSocketListener(socket);
 
-      listener.startEvents();
+      new ModulesSocketListener(socket).startEvents();
     });
   }
 }

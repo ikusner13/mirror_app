@@ -17,17 +17,17 @@
     "weather": {
       "config": {
         "pullRate": 600000,
-        "ZIP": "44240",
-        "APIKey": "b8d8163c79b9574cc193215f73d445c9"
+        "ZIP": "",
+        "APIKey": ""
       }
     },
     "spotify": {
       "config": {
-        "client_id": "ea6138f43f35409db024428889e1aa73",
-        "client_secret": "5284397c71cd413d8915d49cfa205684",
+        "client_id": "",
+        "client_secret": "",
         "redirect_uri": "http://localhost:8888/callback",
-        "access_token": "BQDvfgQDI5erT1oA2-87kVC6NgTDzaLgi3Z_WGDEoqP4x97YyLS74_ciUGgJdYabZtnJoMBoIk8CeYs7OsK0RQkyF6On5M12PnlhNPGywZ1z20h_ZJ7oKareWmt9VAqDwtVJz_LT6X2aDWdJzoooIJTGciJ9f_eyDTZfukw",
-        "refresh_token": "AQBKIKhWeXPbrJflDfeKJTP1NKpgv5l5-fsQJSr8ksElzLonGN6Kt-i4LhPQPFRNFOqCO4oSwKfocx061_g3JqZ5IORVVGIAkVnkBjgbP6_HJUeFfOeYbS84ZrcddCYlhiY"
+        "access_token": "",
+        "refresh_token": ""
       }
     },
     "googlePhotos": {
@@ -43,7 +43,7 @@
     "calendar": {
       "config": {
         "pullRate": 300000,
-        "icalURL": "https://calendar.google.com/calendar/ical/mik843la48t8tn71pc6nhk1jag%40group.calendar.google.com/private-71da6f7a4888c316e6f10323bf0f220a/basic.ics"
+        "icalURL": ""
       }
     }
   }

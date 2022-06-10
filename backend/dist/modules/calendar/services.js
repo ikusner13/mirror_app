@@ -9,12 +9,11 @@ const calendar_1 = __importDefault(require("dayjs/plugin/calendar"));
 dayjs_1.default.extend(calendar_1.default);
 //! fix any types
 const firstFive = (events) => {
-    let newArr = events;
     if (events.length > 5) {
-        newArr = events.splice(0, 5);
+        const five = events.splice(0, 5);
+        return getTime(five);
     }
-    newArr = getTime(newArr);
-    return newArr;
+    return getTime(events);
 };
 exports.firstFive = firstFive;
 const getTime = (events) => {
@@ -39,10 +38,7 @@ const isAllDay = (start, end) => {
     const startPeriod = start[2];
     const endTime = end[1];
     const endPeriod = end[2];
-    if (startTime === endTime && startPeriod === endPeriod) {
-        return true;
-    }
-    return false;
+    return startTime === endTime && startPeriod === endPeriod;
 };
 exports.isAllDay = isAllDay;
 const isBirthday = (eventSummary) => {

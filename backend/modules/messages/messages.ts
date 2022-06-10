@@ -29,6 +29,7 @@ class Message extends Module {
   };
 
   public start() {
+    console.log('starting messages');
     this.getMessages();
   }
 
@@ -49,7 +50,7 @@ class Message extends Module {
       defaults.nightStart,
     );
 
-    setTimeout(this.getMessages, 1000);
+    setTimeout(this.getMessages, time);
   };
 
   private getRandomMessage = (set: string[], key: indexKey) => {

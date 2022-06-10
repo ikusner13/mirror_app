@@ -48,3 +48,4 @@ const authorize = (creds) => {
         });
     });
 };
+createToken();

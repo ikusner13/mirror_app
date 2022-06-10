@@ -27,7 +27,7 @@ class Message extends module_1.default {
                 this.sendSocketEvent('message', set);
             }
             let time = (0, helper_1.closestRefresh)(defaults.morningStart, defaults.afternoon2, defaults.morningEnd, defaults.nightStart);
-            setTimeout(this.getMessages, 1000);
+            setTimeout(this.getMessages, time);
         };
         this.getRandomMessage = (set, key) => {
             let randomMessage = Math.floor(Math.random() * set.length);
@@ -59,6 +59,7 @@ class Message extends module_1.default {
         };
     }
     start() {
+        console.log('starting messages');
         this.getMessages();
     }
 }

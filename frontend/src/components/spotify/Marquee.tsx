@@ -17,7 +17,7 @@ const Marquee = ({ text }: Props) => {
   const [overflowActive, setOverflowActive] = useState(false);
 
   useEffect(() => {
-    if (titleRef) {
+    if (titleRef && titleRef.current) {
       const hasOverflow = checkOverflow(titleRef.current);
       setOverflowActive(hasOverflow);
     }

@@ -36,6 +36,7 @@ let CURRENT_PULL = MIN_PULL;
 
 class Spotify extends Module {
   public start() {
+    console.log('starting spotify');
     this.setNowPlaying();
   }
   private setNowPlaying = async () => {

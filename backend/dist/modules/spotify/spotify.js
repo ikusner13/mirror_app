@@ -67,6 +67,7 @@ class Spotify extends module_1.default {
         });
     }
     start() {
+        console.log('starting spotify');
         this.setNowPlaying();
     }
 }

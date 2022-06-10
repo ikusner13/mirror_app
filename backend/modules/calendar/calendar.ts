@@ -8,6 +8,7 @@ const pullRate: number = config.get('modules.calendar.config.pullRate');
 
 class Calendar extends Module {
   public start(): void {
+    console.log('starting calendar');
     this.getICS();
   }
 
