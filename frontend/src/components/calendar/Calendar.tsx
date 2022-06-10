@@ -50,9 +50,15 @@ const Calendar = () => {
           <li key={index}>
             <div>
               {isBirthday ? (
-                <i className="fa fa-birthday-cake" aria-hidden="true"></i>
+                <i
+                  className="fa fa-birthday-cake eventIcon"
+                  aria-hidden="true"
+                ></i>
               ) : (
-                <i className="fa fa-calendar-o" aria-hidden="true"></i>
+                <i
+                  className="fa fa-calendar-o eventIcon"
+                  aria-hidden="true"
+                ></i>
               )}
               <>{summary}</>
             </div>

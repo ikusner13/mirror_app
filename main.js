@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const server = require('./backend/dist/server');
 const path = require('path');
-const url = require('url');
+const { URL } = require('url');
 
 const createWindow = () => {
   let mainWindow = new BrowserWindow({
@@ -23,13 +23,13 @@ const createWindow = () => {
   });
 
   //mainWindow.webContents.openDevTools()
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, './backend/build/index.html'),
-      protocol: 'file:',
-      slashes: true,
-    }),
+
+  const u = new URL(
+    path.join(__dirname, './backend/build/index.html'),
+    'file:',
   );
+
+  mainWindow.loadURL(u.href);
 };
 
 app.whenReady().then(createWindow);
