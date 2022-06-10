@@ -42,21 +42,21 @@
       },
       "auth": {
         "installed": {
-          "client_id": "774875968778-f4o7hlktmreeecj9v0379vmcq5iemv61.apps.googleusercontent.com",
-          "project_id": "mirror-display-1596167682017",
+          "client_id": "",
+          "project_id": "",
           "auth_uri": "https://accounts.google.com/o/oauth2/auth",
           "token_uri": "https://oauth2.googleapis.com/token",
           "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "client_secret": "Ga3ykH5EYg0QxmqkpRp9yzzd",
-          "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob", "http://localhost"]
+          "client_secret": "",
+          "redirect_uris": ["", ""]
         }
       },
       "token": {
-        "access_token": "ya29.a0ARrdaM8Q8DUS2oihoe1onoSqhbPshdSrlu2EVWcaIJfstoURZygvaZPUVUV4COCLXR4fB7l0ZvgR0veYOkZ-TkcvxERsbigF7yJ0kYB-g1R9xIt4TjOdIZDNvc6ER9xuE5HlAqiIcFgf9ZFnV3WlcEhNhyh_OeY",
+        "access_token": "",
         "scope": "https://www.googleapis.com/auth/photoslibrary.sharing https://www.googleapis.com/auth/photoslibrary",
         "token_type": "Bearer",
         "expiry_date": 1636945199202,
-        "refresh_token": "1//0f3rQwDo--it1CgYIARAAGA8SNwF-L9IrN9j0V-G-IBgru2bsTYX1Ysf9dV4IywGiuJhZtXycA4TaICsqWu10NU9X8npxRBXmu-A"
+        "refresh_token": ""
       }
     },
     "calendar": {
