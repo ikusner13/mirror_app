@@ -62,7 +62,7 @@
     "calendar": {
       "config": {
         "pullRate": 300000,
-        "icalURL": ""
+        "icalUrl": ""
       }
     }
   }
