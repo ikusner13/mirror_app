@@ -1,0 +1,69 @@
+{
+  "port": 5001,
+  "origin": 3000,
+  "modules": {
+    "message": {
+      "config": {
+        "morningStart": 7,
+        "morningEnd": 10,
+        "afternoon2": 17,
+        "nightStart": 22
+      },
+      "messages": {
+        "anyTime": ["test", "test"],
+        "morning": ["test", "test"],
+        "evening": ["test", "test"]
+      }
+    },
+    "weather": {
+      "config": {
+        "pullRate": 600000,
+        "ZIP": "",
+        "APIKey": ""
+      }
+    },
+    "spotify": {
+      "config": {
+        "client_id": "",
+        "client_secret": "",
+        "redirect_uri": "http://localhost:8888/callback",
+        "access_token": "",
+        "refresh_token": ""
+      }
+    },
+    "googlePhotos": {
+      "config": {
+        "tokenPath": "/token.json",
+        "scopes": [
+          "https://www.googleapis.com/auth/photoslibrary",
+          "https://www.googleapis.com/auth/photoslibrary.sharing"
+        ],
+        "albumTitle": "Mirror"
+      },
+      "auth": {
+        "installed": {
+          "client_id": "",
+          "project_id": "",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+          "client_secret": "",
+          "redirect_uris": ["", ""]
+        }
+      },
+      "token": {
+        "access_token": "",
+        "scope": "https://www.googleapis.com/auth/photoslibrary.sharing https://www.googleapis.com/auth/photoslibrary",
+        "token_type": "Bearer",
+        "expiry_date": 1636945199202,
+        "refresh_token": ""
+      }
+    },
+    "calendar": {
+      "config": {
+        "pullRate": 300000,
+        "icalURL": ""
+      }
+    }
+  }
+}

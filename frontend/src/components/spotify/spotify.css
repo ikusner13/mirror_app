@@ -1,0 +1,67 @@
+.nowPlaying {
+  line-height: 1.05;
+  max-width: 400px;
+}
+
+.albumCover {
+  width: 200px;
+  height: 200px;
+}
+
+.songInfo {
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.songInfo:last-of-type {
+  margin-bottom: 0;
+}
+
+.spotifyIcon {
+  margin-right: 5px;
+  width: 15px;
+}
+
+.marquee {
+  margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+  max-width: 30ch;
+}
+
+.marquee span.move {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee2 span.move {
+  display: inline-block;
+  animation: marquee2 20s linear infinite;
+}
+
+@keyframes marquee2 {
+  0%,
+  10% {
+    transform: translate(110%, 0);
+  }
+
+  90%,
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes marquee {
+  0%,
+  10% {
+    transform: translate(0, 0);
+  }
+
+  90%,
+  100% {
+    transform: translate(-110%, 0);
+  }
+}

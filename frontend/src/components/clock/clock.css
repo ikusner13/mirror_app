@@ -1,0 +1,10 @@
+.seconds {
+  font-size: 40%;
+  color: #5e5e5e;
+  position: relative;
+  top: -1em;
+}
+
+.time {
+  font-size: 1.1em;
+}

@@ -1,22 +1,39 @@
-.seconds {
-  font-size: 40%;
-  color: #5e5e5e;
-  position: relative;
-  top: -1em;
+.layout {
+  display: grid;
+  height: 100vh;
+  color: #aaa;
+  grid-template-columns: repeat(5, 1fr);
+  align-content: space-between;
+  grid-template-areas:
+    'TL TL . TR TR'
+    '. . . . .'
+    'M M M M M'
+    'BL . . . BR';
+  padding: 1rem;
+  justify-items: center;
+  justify-content: space-between;
 }
 
-i {
-  margin-right: 5px;
+.topLeft {
+  grid-area: TL;
+  justify-self: start;
 }
 
-.message {
-  font-size: 125%;
-  text-align: center;
+.topRight {
+  grid-area: TR;
+  justify-self: end;
 }
 
-.time {
-  font-size: 1.1em;
+.middle {
+  grid-area: M;
 }
-.date {
-  font-size: 80%;
+
+.bottomLeft {
+  grid-area: BL;
+  align-self: end;
+}
+
+.bottomRight {
+  grid-area: BR;
+  align-self: end;
 }
