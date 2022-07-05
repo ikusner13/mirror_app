@@ -10,6 +10,17 @@ interface ISpotify {
   album: string;
 }
 
+const shouldUpdateSongObj = (data: ISpotify, prev: ISpotify | null) => {
+  if (!prev && data) return true;
+
+  return (
+    data.album !== prev.album &&
+    data.artist !== prev.artist &&
+    data.songTitle !== prev.songTitle &&
+    data.imgURL !== prev.imgURL
+  );
+};
+
 const Spotify = () => {
   // eslint-disable-next-line
   const test: ISpotify = {
@@ -20,12 +31,13 @@ const Spotify = () => {
     album: 'album',
   };
 
-  // const [songInfo, setSongInfo] = useState<ISpotify>(null);
-  const [songInfo, setSongInfo] = useState<ISpotify>(test);
+  const [songInfo, setSongInfo] = useState<ISpotify>(null);
 
   useEffect(() => {
     socket.on('spotify', (data: ISpotify) => {
-      setSongInfo(data);
+      if (shouldUpdateSongObj(data, songInfo)) {
+        setSongInfo(data);
+      }
     });
   }, []);
 

@@ -26,11 +26,15 @@ const Marquee = ({ text }: Props) => {
   return (
     <>
       <span ref={titleRef} className="marquee">
-        <span className={`${overflowActive ? 'move' : ''}`}>{text}</span>
+        <span key={text} className={`${overflowActive ? 'move' : ''}`}>
+          {text}
+        </span>
       </span>
       {overflowActive && (
         <span className="marquee marquee2">
-          <span className="move">{text}</span>
+          <span key={text} className="move">
+            {text}
+          </span>
         </span>
       )}
     </>
