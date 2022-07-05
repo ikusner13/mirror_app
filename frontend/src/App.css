@@ -6,12 +6,17 @@
   align-content: space-between;
   grid-template-areas:
     'TL TL . TR TR'
-    '. . . . .'
+    'P P P P P'
     'M M M M M'
     'BL . . . BR';
   padding: 1rem;
   justify-items: center;
   justify-content: space-between;
+}
+
+.middleBottom {
+  grid-area: MB;
+  height: 300px;
 }
 
 .topLeft {
@@ -36,4 +41,8 @@
 .bottomRight {
   grid-area: BR;
   align-self: end;
+}
+
+.pArea {
+  height: 75vh;
 }

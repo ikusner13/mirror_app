@@ -25,7 +25,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "tsc": "tsc",
-    "copy-build": "cp -r build ../backend/"
+    "copy": "cp -r build ../backend/",
+    "copy-build": "yarn build && yarn copy"
   },
   "eslintConfig": {
     "extends": "react-app"

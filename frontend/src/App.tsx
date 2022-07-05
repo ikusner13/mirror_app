@@ -19,6 +19,7 @@ function App() {
         <Date />
         <CurrentWeather />
       </div>
+      <div className="pArea" />
       <div className="middle">
         <Message />
       </div>
