@@ -10,8 +10,8 @@ interface ISpotify {
   album: string;
 }
 
-const shouldUpdateSongObj = (data: ISpotify, prev: ISpotify | null) => {
-  if (!prev && data) return true;
+const shouldUpdateSongObj = (data: ISpotify | null, prev: ISpotify | null) => {
+  if ((!prev && data) || (prev && !data)) return true;
 
   return (
     data.album !== prev.album &&
