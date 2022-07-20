@@ -34,10 +34,11 @@ const Spotify = () => {
   const [songInfo, setSongInfo] = useState<ISpotify>(null);
 
   useEffect(() => {
-    socket.on('spotify', (data: ISpotify) => {
-      if (shouldUpdateSongObj(data, songInfo)) {
-        setSongInfo(data);
-      }
+    socket.on('spotify', (data: ISpotify | null) => {
+      // if (shouldUpdateSongObj(data, songInfo)) {
+      //   setSongInfo(data);
+      // }
+      setSongInfo(data);
     });
   }, []);
 
