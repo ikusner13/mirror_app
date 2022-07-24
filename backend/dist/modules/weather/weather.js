@@ -23,7 +23,7 @@ class Weather extends module_1.default {
     constructor() {
         super(...arguments);
         this.getWeather = () => __awaiter(this, void 0, void 0, function* () {
-            const fetch_res = yield (0, node_fetch_1.default)(api_uri).catch((error) => console.log(error));
+            const fetch_res = yield (0, node_fetch_1.default)(api_uri).catch((error) => console.error(`🦄 ${Date.now().toString()} error: ${JSON.stringify(error, null, 4)}`));
             if (fetch_res) {
                 const json = yield fetch_res.json();
                 this.sendSocketEvent('weather', json);

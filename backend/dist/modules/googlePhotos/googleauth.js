@@ -81,7 +81,7 @@ class GooglePhotos extends module_1.default {
                 }
             }
             catch (error) {
-                console.log('error', error);
+                console.error(`🦄 ${Date.now().toString()} object: ${JSON.stringify(error, null, 4)}`);
             }
         });
     }

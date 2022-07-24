@@ -25,8 +25,9 @@ class Calendar extends module_1.default {
             let events = [];
             const webEvents = yield node_ical_1.default.async
                 .fromURL(icalURL)
-                .catch((err) => console.log(err));
+                .catch((err) => console.error(`🦄 ${Date.now().toString()} object: ${JSON.stringify(err, null, 4)}`));
             if (!webEvents) {
+                setTimeout(this.getICS, pullRate);
                 return;
             }
             for (let k in webEvents) {
