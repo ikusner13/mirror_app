@@ -16,9 +16,14 @@ class Calendar extends Module {
     let events = [];
     const webEvents = await ical.async
       .fromURL(icalURL)
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        console.error(
+          `🦄 ${Date.now().toString()} object: ${JSON.stringify(err, null, 4)}`,
+        ),
+      );
 
     if (!webEvents) {
+      setTimeout(this.getICS, pullRate);
       return;
     }
 

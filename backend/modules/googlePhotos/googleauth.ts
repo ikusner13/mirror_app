@@ -133,7 +133,9 @@ class GooglePhotos extends Module {
         throw new Error('could not find album');
       }
     } catch (error) {
-      console.log('error', error);
+      console.error(
+        `🦄 ${Date.now().toString()} object: ${JSON.stringify(error, null, 4)}`,
+      );
     }
   }
 

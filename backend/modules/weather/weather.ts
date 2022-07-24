@@ -13,8 +13,13 @@ class Weather extends Module {
     console.log('starting weather');
     this.getWeather();
   }
+
   private getWeather = async () => {
-    const fetch_res = await fetch(api_uri).catch((error) => console.log(error));
+    const fetch_res = await fetch(api_uri).catch((error) =>
+      console.error(
+        `🦄 ${Date.now().toString()} error: ${JSON.stringify(error, null, 4)}`,
+      ),
+    );
 
     if (fetch_res) {
       const json = await fetch_res.json();
