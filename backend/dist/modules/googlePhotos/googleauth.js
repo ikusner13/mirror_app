@@ -18,6 +18,7 @@ const module_1 = __importDefault(require("../module"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const config_1 = __importDefault(require("config"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
+const logger_1 = __importDefault(require("../../logger"));
 const albumTitle = config_1.default.get('modules.googlePhotos.config.albumTitle');
 const token = config_1.default.get('modules.googlePhotos.token');
 const auth = config_1.default.get('modules.googlePhotos.auth');
@@ -43,7 +44,6 @@ class GooglePhotos extends module_1.default {
         });
     }
     start() {
-        console.log('starting googlePhotos');
         this.googlePhotos();
     }
     getPhotoUrl(auth) {
@@ -81,7 +81,7 @@ class GooglePhotos extends module_1.default {
                 }
             }
             catch (error) {
-                console.error(`🦄 ${Date.now().toString()} object: ${JSON.stringify(error, null, 4)}`);
+                logger_1.default.error(`failed to fetch album ${error.message}`);
             }
         });
     }

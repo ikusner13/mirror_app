@@ -3,6 +3,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import Socket from './socket';
 import config from 'config';
+import logger from './logger';
 
 const port = config.get('port');
 const origin = config.get('origin');
@@ -21,7 +22,7 @@ app.use(express.static('build'));
 Socket.startSocket(io);
 
 server.listen(port, () => {
-  console.log(`listening on port ${port}`);
+  logger.info(`listening on port ${port}`);
 });
 
 export default io;

@@ -16,6 +16,7 @@ const node_ical_1 = __importDefault(require("node-ical"));
 const module_1 = __importDefault(require("../module"));
 const services_1 = require("./services");
 const config_1 = __importDefault(require("config"));
+const logger_1 = __importDefault(require("../../logger"));
 const icalURL = config_1.default.get('modules.calendar.config.icalUrl');
 const pullRate = config_1.default.get('modules.calendar.config.pullRate');
 class Calendar extends module_1.default {
@@ -25,7 +26,7 @@ class Calendar extends module_1.default {
             let events = [];
             const webEvents = yield node_ical_1.default.async
                 .fromURL(icalURL)
-                .catch((err) => console.error(`🦄 ${Date.now().toString()} object: ${JSON.stringify(err, null, 4)}`));
+                .catch((err) => logger_1.default.error(`Error getting ical from ${icalURL}: ${err}`));
             if (!webEvents) {
                 setTimeout(this.getICS, pullRate);
                 return;
@@ -77,7 +78,6 @@ class Calendar extends module_1.default {
         });
     }
     start() {
-        console.log('starting calendar');
         this.getICS();
     }
 }

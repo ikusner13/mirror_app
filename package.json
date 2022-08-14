@@ -1,13 +1,14 @@
 {
-    "main": "main.js",
-    "scripts": {
-        "start": "electron ."
-    },
-    "devDependencies": {
-        "concurrently": "^5.2.0",
-        "electron": "^11.1.0"
-    },
-    "dependencies": {
-        "node-fetch": "^2.6.0"
-    }
+  "main": "main.js",
+  "license": "ISC",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "electron": "^11.1.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
 }

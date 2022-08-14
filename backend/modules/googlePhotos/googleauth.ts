@@ -5,6 +5,7 @@ import Module from '../module';
 import dayjs from 'dayjs';
 import config from 'config';
 import fetch from 'node-fetch';
+import logger from '../../logger';
 
 interface Album {
   id: string;
@@ -60,7 +61,6 @@ class GooglePhotos extends Module {
   private _lastPhotos: number[] = [];
 
   public start(): void {
-    console.log('starting googlePhotos');
     this.googlePhotos();
   }
 
@@ -132,10 +132,8 @@ class GooglePhotos extends Module {
       } else {
         throw new Error('could not find album');
       }
-    } catch (error) {
-      console.error(
-        `🦄 ${Date.now().toString()} object: ${JSON.stringify(error, null, 4)}`,
-      );
+    } catch (error: any) {
+      logger.error(`failed to fetch album ${error.message}`);
     }
   }
 

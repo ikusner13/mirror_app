@@ -8,6 +8,7 @@ const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const socket_1 = __importDefault(require("./socket"));
 const config_1 = __importDefault(require("config"));
+const logger_1 = __importDefault(require("./logger"));
 const port = config_1.default.get('port');
 const origin = config_1.default.get('origin');
 const app = (0, express_1.default)();
@@ -22,6 +23,6 @@ const io = new socket_io_1.Server(server, {
 app.use(express_1.default.static('build'));
 socket_1.default.startSocket(io);
 server.listen(port, () => {
-    console.log(`listening on port ${port}`);
+    logger_1.default.info(`listening on port ${port}`);
 });
 exports.default = io;

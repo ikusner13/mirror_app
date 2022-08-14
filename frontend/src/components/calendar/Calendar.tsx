@@ -48,19 +48,13 @@ const Calendar = () => {
         const isBirthday = item.birthday;
         return (
           <li key={index}>
-            <div>
+            <div style={{ display: 'flex' }}>
               {isBirthday ? (
-                <i
-                  className="fa fa-birthday-cake eventIcon"
-                  aria-hidden="true"
-                ></i>
+                <i className="fa fa-birthday-cake" aria-hidden="true"></i>
               ) : (
-                <i
-                  className="fa fa-calendar-o eventIcon"
-                  aria-hidden="true"
-                ></i>
+                <i className="fa fa-calendar-o" aria-hidden="true"></i>
               )}
-              <>{summary}</>
+              <div className="eventTitle">{summary}</div>
             </div>
             <div className="eventTime">
               {isAllDay ? (

@@ -29,7 +29,6 @@ class Message extends Module {
   };
 
   public start() {
-    console.log('starting messages');
     this.getMessages();
   }
 

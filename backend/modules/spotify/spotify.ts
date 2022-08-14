@@ -36,7 +36,6 @@ let CURRENT_PULL = MIN_PULL;
 
 class Spotify extends Module {
   public start() {
-    console.log('starting spotify');
     this.setNowPlaying();
   }
   private setNowPlaying = async () => {
@@ -99,9 +98,7 @@ const refresh = async () => {
     const newToken = await spotifyApi.refreshAccessToken();
     spotifyApi.setAccessToken(newToken.body['access_token']);
     tokenExpirationEpoch = dayjs().add(newToken.body.expires_in, 'second');
-  } catch (err) {
-    //console.log(err.message)
-  }
+  } catch (err) {}
 };
 
 export default Spotify;

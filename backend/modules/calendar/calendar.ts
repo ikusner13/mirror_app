@@ -2,13 +2,13 @@ import ical, { VEvent } from 'node-ical';
 import Module from '../module';
 import { firstFive, isAllDay, isBirthday } from './services';
 import config from 'config';
+import logger from '../../logger';
 
 const icalURL: string = config.get('modules.calendar.config.icalUrl');
 const pullRate: number = config.get('modules.calendar.config.pullRate');
 
 class Calendar extends Module {
   public start(): void {
-    console.log('starting calendar');
     this.getICS();
   }
 
@@ -17,9 +17,7 @@ class Calendar extends Module {
     const webEvents = await ical.async
       .fromURL(icalURL)
       .catch((err) =>
-        console.error(
-          `🦄 ${Date.now().toString()} object: ${JSON.stringify(err, null, 4)}`,
-        ),
+        logger.error(`Error getting ical from ${icalURL}: ${err}`),
       );
 
     if (!webEvents) {

@@ -4,8 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "dev": "yarn ts server.ts -w",
     "start": "node server.js",
-    "type-check": "tsc",
+    "build": "tsc",
     "ts": "ts-node"
   },
   "keywords": [],

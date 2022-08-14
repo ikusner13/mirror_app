@@ -67,7 +67,6 @@ class Spotify extends module_1.default {
         });
     }
     start() {
-        console.log('starting spotify');
         this.setNowPlaying();
     }
 }
@@ -100,8 +99,6 @@ const refresh = () => __awaiter(void 0, void 0, void 0, function* () {
         spotifyApi.setAccessToken(newToken.body['access_token']);
         tokenExpirationEpoch = (0, dayjs_1.default)().add(newToken.body.expires_in, 'second');
     }
-    catch (err) {
-        //console.log(err.message)
-    }
+    catch (err) { }
 });
 exports.default = Spotify;
